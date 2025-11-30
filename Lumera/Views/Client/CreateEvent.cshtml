@@ -1,0 +1,289 @@
+﻿@model Lumera.Models.Event
+@{
+    ViewData["Title"] = "Create Event - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800<aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Client Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(ViewBag.ClientName ?? "User")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Client</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/client/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/browse">
+                    <span class="material-symbols-outlined">search</span> Browse & Book
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/reviews">
+                    <span class="material-symbols-outlined">reviews</span> My Reviews
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/profile">
+                    <span class="material-symbols-outlined">settings</span> Profile Settings
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/home/index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-20">
+                <div class="flex items-center gap-4">
+                    <a href="/client/events" class="p-2 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg">
+                        <span class="material-symbols-outlined text-stone-600 dark:text-stone-300">arrow_back</span>
+                    </a>
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Create New Event</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    @await Html.PartialAsync("_NotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-8">
+                        <form asp-action="CreateEvent" method="post" id="createEventForm">
+                            <div class="space-y-6">
+                                <!-- Event Name -->
+                                <div>
+                                    <label for="EventName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Event Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text"
+                                           id="EventName"
+                                           name="EventName"
+                                           asp-for="EventName"
+                                           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                           placeholder="e.g., John & Jane's Wedding"
+                                           required />
+                                    <span asp-validation-for="EventName" class="text-red-500 text-sm"></span>
+                                </div>
+
+                                <!-- Event Type -->
+                                <div>
+                                    <label for="EventType" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Event Type <span class="text-red-500">*</span>
+                                    </label>
+                                    <select id="EventType"
+                                            name="EventType"
+                                            asp-for="EventType"
+                                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                            required>
+                                        <option value="">Select event type</option>
+                                        <option value="Wedding">Wedding</option>
+                                        <option value="Birthday">Birthday</option>
+                                        <option value="Corporate">Corporate Event</option>
+                                        <option value="Conference">Conference</option>
+                                        <option value="Party">Party</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span asp-validation-for="EventType" class="text-red-500 text-sm"></span>
+                                </div>
+
+                                <!-- Event Description -->
+                                <div>
+                                    <label for="EventDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Event Description
+                                    </label>
+                                    <textarea id="EventDescription"
+                                              name="EventDescription"
+                                              asp-for="EventDescription"
+                                              rows="4"
+                                              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                                              placeholder="Describe your event..."></textarea>
+                                    <span asp-validation-for="EventDescription" class="text-red-500 text-sm"></span>
+                                </div>
+
+                                <!-- Event Date and Guest Count Row -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Event Date -->
+                                    <div>
+                                        <label for="EventDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Event Date <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="date"
+                                               id="EventDate"
+                                               name="EventDate"
+                                               asp-for="EventDate"
+                                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                               required />
+                                        <span asp-validation-for="EventDate" class="text-red-500 text-sm"></span>
+                                    </div>
+
+                                    <!-- Guest Count -->
+                                    <div>
+                                        <label for="GuestCount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Guest Count
+                                        </label>
+                                        <input type="number"
+                                               id="GuestCount"
+                                               name="GuestCount"
+                                               asp-for="GuestCount"
+                                               min="0"
+                                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                               placeholder="Expected number of guests" />
+                                        <span asp-validation-for="GuestCount" class="text-red-500 text-sm"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Budget and Location Row -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Budget -->
+                                    <div>
+                                        <label for="Budget" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Budget
+                                        </label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₱</span>
+                                            <input type="number"
+                                                   id="Budget"
+                                                   name="Budget"
+                                                   asp-for="Budget"
+                                                   step="0.01"
+                                                   min="0"
+                                                   class="w-full pl-8 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                                   placeholder="0.00" />
+                                        </div>
+                                        <span asp-validation-for="Budget" class="text-red-500 text-sm"></span>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div>
+                                        <label for="Location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            Location
+                                        </label>
+                                        <input type="text"
+                                               id="Location"
+                                               name="Location"
+                                               asp-for="Location"
+                                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                               placeholder="Event venue or address" />
+                                        <span asp-validation-for="Location" class="text-red-500 text-sm"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Status (Hidden, defaults to Draft) -->
+                                <input type="hidden" name="Status" value="Draft" />
+
+                                <!-- Form Actions -->
+                                <div class="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                    <a href="/client/events" class="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-stone-800 font-medium transition-colors">
+                                        Cancel
+                                    </a>
+                                    <button type="submit"
+                                            class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        Create Event
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/notifications.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set minimum date to today
+            const eventDateInput = document.getElementById('EventDate');
+            const today = new Date().toISOString().split('T')[0];
+            eventDateInput.setAttribute('min', today);
+
+            // Format budget input
+            const budgetInput = document.getElementById('Budget');
+            budgetInput.addEventListener('blur', function(e) {
+                if (e.target.value) {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                        e.target.value = value.toFixed(2);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

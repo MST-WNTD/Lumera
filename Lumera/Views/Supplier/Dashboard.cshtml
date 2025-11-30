@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lumera - Supplier Dashboard</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope:wght@400;500;700;800" onload="this.rel='stylesheet'" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark/80 shadow-md flex-col hidden lg:flex">
+            <div class="flex items-center gap-4 p-6 border-b border-slate-200 dark:border-slate-800">
+                <div class="w-10 h-10 text-primary">
+                    <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+                        <path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Lumera</h2>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="/Supplier/Dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyEvents">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyServices">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Messages">
+                    <span class="material-symbols-outlined">chat</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyProfile">
+                    <span class="material-symbols-outlined">person</span> My Profile
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Earnings">
+                    <span class="material-symbols-outlined">paid</span> Earnings & Payouts
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Mobile Header -->
+            <header class="bg-background-light/80 dark:bg-background-dark/50 backdrop-blur-sm sticky top-0 z-10 lg:hidden">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between h-16 border-b border-primary/20 dark:border-primary/30">
+                        <div class="flex items-center gap-4 text-slate-800 dark:text-slate-200">
+                            <div class="w-8 h-8 text-primary">
+                                <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+                                    <path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Lumera</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="relative rounded-full p-2 text-slate-500 dark:text-slate-400 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary dark:hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">notifications</span>
+                            </button>
+                            <div class="w-10 h-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCZKu3qGDx6i135vM50kPZTdkr9QLbUUO5mmoymSqKdKe0usU4zB2V4qQSYYLsSdAnovk8sGmY_lii8DmUwSc8AER1wH-_NRVHhpe18OuLHBswV-PErbJicq3BJnupmQGfvGHupDH7XDHlv1Bqs8aWRx-OWERGoKzB9yHuL22GVYYzHHfMaKDhrO8KzuX5MHhnF7hJ2p3oWTK9KD9t-MEfgQPEHufleovcUy3RsdqYPlXt0U0ZSr6WoPTnvucDu0nLrLdiDc1sraYA");'></div>
+                            <button class="rounded-md p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden">
+                                <span class="material-symbols-outlined">menu</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="flex-1 bg-background-light dark:bg-background-dark">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">Supplier Dashboard</h1>
+                        <div class="text-sm text-slate-500 dark:text-slate-400">
+                            Welcome back, <span class="font-semibold text-slate-700 dark:text-slate-300">@Model.Supplier.BusinessName</span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Overview -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Bookings</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">@Model.TotalBookings</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-primary/10 text-primary">
+                                    <span class="material-symbols-outlined">book_online</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                <span class="text-green-500">+12%</span> from last month
+                            </p>
+                        </div>
+
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Active Services</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">@Model.ActiveServices</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400">
+                                    <span class="material-symbols-outlined">design_services</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                All services active
+                            </p>
+                        </div>
+
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Average Rating</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">@Model.AverageRating</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                    <span class="material-symbols-outlined">star</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                Based on @Model.TotalReviews reviews
+                            </p>
+                        </div>
+
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Pending Requests</p>
+                                    <p class="text-2xl font-bold text-slate-900 dark:text-white">@Model.PendingRequests</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/20 dark:text-orange-400">
+                                    <span class="material-symbols-outlined">pending</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                                Need your attention
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity & Upcoming Bookings -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Recent Bookings -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Recent Bookings</h3>
+                                <a href="/Supplier/Bookings" class="text-primary text-sm font-medium">View All</a>
+                            </div>
+                            <div class="space-y-4">
+                                @foreach (var booking in Model.RecentBookings)
+                                {
+                                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                                        <div>
+                                            <p class="font-semibold text-slate-800 dark:text-slate-200">@booking.ServiceName</p>
+                                            <p class="text-sm text-slate-500 dark:text-slate-400">@booking.ClientName • @booking.EventDate.ToString("MMM dd, yyyy")</p>
+                                        </div>
+                                        <span class="px-2 py-1 text-xs rounded-full
+                                            @(booking.Status == "Confirmed" ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400" :
+                                              booking.Status == "Pending" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400" :
+                                              "bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300")">
+                                            @booking.Status
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-6">Quick Actions</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <a href="/Supplier/MyServices/Create" class="flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                                    <span class="material-symbols-outlined text-2xl mb-2">add_circle</span>
+                                    <span class="text-sm font-medium">Add Service</span>
+                                </a>
+                                <a href="/Supplier/Bookings" class="flex flex-col items-center justify-center p-4 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    <span class="material-symbols-outlined text-2xl mb-2">visibility</span>
+                                    <span class="text-sm font-medium">View Requests</span>
+                                </a>
+                                <a href="/Supplier/Messages" class="flex flex-col items-center justify-center p-4 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    <span class="material-symbols-outlined text-2xl mb-2">chat</span>
+                                    <span class="text-sm font-medium">Messages</span>
+                                </a>
+                                <a href="/Supplier/Earnings" class="flex flex-col items-center justify-center p-4 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                                    <span class="material-symbols-outlined text-2xl mb-2">paid</span>
+                                    <span class="text-sm font-medium">Earnings</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

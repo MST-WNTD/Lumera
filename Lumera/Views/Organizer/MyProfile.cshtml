@@ -1,0 +1,437 @@
+﻿@model Lumera.Models.OrganizerProfileViewModel
+@using Lumera.Services
+@{
+    ViewData["Title"] = "My Profile - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .readonly-field {
+            background-color: #f9fafb !important;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Fixed Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Organizer Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(Model.Organizer.BusinessName ?? "Business")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Organizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2 overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/services">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                    @if (Model.UnreadMessages > 0)
+                    {
+                        <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-auto">@Model.UnreadMessages</span>
+                    }
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/earnings">
+                    <span class="material-symbols-outlined">payments</span> Earnings & Payouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/organizer/profile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" asp-controller="Home" asp-action="Index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area with margin for fixed sidebar -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Fixed Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-10">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">My Profile</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Manage your organizer profile</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-stone-400">search</span>
+                        <input class="bg-background-light dark:bg-stone-800 border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary" placeholder="Search..." type="text" />
+                    </div>
+                    @await Html.PartialAsync("_OrganizerNotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Main Content with top margin for fixed header -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <!-- Profile Header -->
+                        <div class="bg-gradient-to-r from-primary to-blue-600 p-6 text-white">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-6">
+                                    <div class="relative">
+                                        <div class="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center">
+                                            <span class="material-symbols-outlined text-white text-4xl">business</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-2xl font-bold">@Model.Organizer.BusinessName</h1>
+                                        <p class="text-white/80">Event Organizer</p>
+                                        <div class="flex items-center gap-4 mt-2">
+                                            <div class="flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-yellow-400">star</span>
+                                                <span>@Model.Organizer.AverageRating.ToString("0.0")</span>
+                                            </div>
+                                            <span class="text-white/60">•</span>
+                                            <span>@Model.CompletedEvents Completed Bookings</span>
+                                            <span class="text-white/60">•</span>
+                                            <span>Member since @(Model.Organizer.User?.CreatedAt.Year.ToString() ?? DateTime.Now.Year.ToString())</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="editProfileBtn" class="bg-white text-primary px-6 py-2 rounded-lg hover:bg-gray-100 font-medium flex items-center gap-2">
+                                    <span class="material-symbols-outlined">edit</span>
+                                    Edit Profile
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Profile Content -->
+                        <div class="p-6">
+                            <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+                                <nav aria-label="Tabs" class="flex -mb-px space-x-8">
+                                    <a aria-current="page" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-primary border-primary" href="#">Profile Information</a>
+                                    <a class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">Account Settings</a>
+                                </nav>
+                            </div>
+
+                            <form id="profileForm" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="businessName">Business Name</label>
+                                        <input class="w-full bg-background-light dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary readonly-field" id="businessName" name="BusinessName" type="text" value="@Model.Organizer.BusinessName" readonly />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">Email Address</label>
+                                        <input class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 cursor-not-allowed" id="email" type="email" value="@Model.Organizer.User?.Email" readonly disabled />
+                                        <p class="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="phone">Phone Number</label>
+                                        <input class="w-full bg-background-light dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary readonly-field" id="phone" name="Phone" type="tel" value="@Model.Organizer.User?.Phone" readonly />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="yearsOfExperience">Years of Experience</label>
+                                        <input class="w-full bg-background-light dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary readonly-field" id="yearsOfExperience" name="YearsOfExperience" type="number" min="0" value="@Model.Organizer.YearsOfExperience" readonly />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="businessDescription">Business Description</label>
+                                    <textarea class="w-full bg-background-light dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary h-32 readonly-field" id="businessDescription" name="BusinessDescription" readonly>@Model.Organizer.BusinessDescription</textarea>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="averageRating">Average Rating</label>
+                                        <input class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 cursor-not-allowed" id="averageRating" type="text" value="@Model.Organizer.AverageRating.ToString("0.0")" readonly disabled />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="totalReviews">Total Reviews</label>
+                                        <input class="w-full bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 cursor-not-allowed" id="totalReviews" type="number" value="@Model.Organizer.TotalReviews" readonly disabled />
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons (Hidden by default) -->
+                                <div id="actionButtons" class="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700 hidden">
+                                    <button id="cancelBtn" class="px-6 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" type="button">
+                                        Cancel
+                                    </button>
+                                    <button id="saveBtn" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors" type="submit">
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/organizer-notifications.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let isEditMode = false;
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const actionButtons = document.getElementById('actionButtons');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const form = document.getElementById('profileForm');
+
+            // Editable fields only
+            const editableFields = [
+                document.getElementById('businessName'),
+                document.getElementById('phone'),
+                document.getElementById('yearsOfExperience'),
+                document.getElementById('businessDescription')
+            ];
+
+            const originalData = {};
+
+            // Store original values
+            editableFields.forEach(field => {
+                if (field) {
+                    originalData[field.id] = field.value;
+                }
+            });
+
+            // Edit Profile Button Click
+            editProfileBtn.addEventListener('click', function() {
+                if (!isEditMode) {
+                    // Enter edit mode
+                    enterEditMode();
+                } else {
+                    // Cancel edit mode
+                    cancelEdit();
+                }
+            });
+
+            // Cancel Button Click
+            cancelBtn.addEventListener('click', function() {
+                cancelEdit();
+            });
+
+            // Form Submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validate fields
+                const businessName = document.getElementById('businessName').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const yearsOfExperience = document.getElementById('yearsOfExperience').value;
+                const businessDescription = document.getElementById('businessDescription').value.trim();
+
+                if (!businessName) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Business name is required',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                if (!businessDescription) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Business description is required',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Update Profile?',
+                    text: "Are you sure you want to save these changes?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#13a4ec',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Yes, update it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateProfile();
+                    }
+                });
+            });
+
+            function enterEditMode() {
+                isEditMode = true;
+
+                // Enable editable fields
+                editableFields.forEach(field => {
+                    if (field) {
+                        field.classList.remove('readonly-field');
+                        field.readOnly = false;
+                        field.classList.add('focus:ring-2', 'focus:ring-primary');
+                    }
+                });
+
+                // Show action buttons
+                actionButtons.classList.remove('hidden');
+
+                // Update edit button
+                editProfileBtn.innerHTML = '<span class="material-symbols-outlined">close</span>Cancel Edit';
+                editProfileBtn.classList.remove('bg-white', 'text-primary', 'hover:bg-gray-100');
+                editProfileBtn.classList.add('bg-red-500', 'text-white', 'hover:bg-red-600');
+            }
+
+            function cancelEdit() {
+                isEditMode = false;
+
+                // Restore original values and disable editing
+                editableFields.forEach(field => {
+                    if (field) {
+                        field.value = originalData[field.id];
+                        field.classList.add('readonly-field');
+                        field.readOnly = true;
+                        field.classList.remove('focus:ring-2', 'focus:ring-primary');
+                    }
+                });
+
+                // Hide action buttons
+                actionButtons.classList.add('hidden');
+
+                // Reset edit button
+                editProfileBtn.innerHTML = '<span class="material-symbols-outlined">edit</span>Edit Profile';
+                editProfileBtn.classList.remove('bg-red-500', 'text-white', 'hover:bg-red-600');
+                editProfileBtn.classList.add('bg-white', 'text-primary', 'hover:bg-gray-100');
+            }
+
+            function updateProfile() {
+                const data = {
+                    BusinessName: document.getElementById('businessName').value.trim(),
+                    BusinessDescription: document.getElementById('businessDescription').value.trim(),
+                    YearsOfExperience: parseInt(document.getElementById('yearsOfExperience').value) || 0,
+                    User: {
+                        Phone: document.getElementById('phone').value.trim()
+                    }
+                };
+
+                // Show loading
+                Swal.fire({
+                    title: 'Updating Profile...',
+                    text: 'Please wait',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Send AJAX request
+                fetch('/Organizer/UpdateProfile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Your profile has been updated successfully.',
+                            icon: 'success',
+                            confirmButtonColor: '#13a4ec'
+                        }).then(() => {
+                            // Update original data with new values
+                            editableFields.forEach(field => {
+                                if (field) {
+                                    originalData[field.id] = field.value;
+                                }
+                            });
+
+                            // Exit edit mode
+                            cancelEdit();
+
+                            // Optionally reload to show updated data in header
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to update profile. Please try again.',
+                            icon: 'error',
+                            confirmButtonColor: '#13a4ec'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while updating your profile.',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+@model IEnumerable<Event>
+
+
+@{
+    ViewData["FullWidth"] = true;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <head>
+        <link rel="stylesheet" href="~/css/landpage.css" />
+    </head>
+
+
+
+<div class="custom-landpage-body">
+
+<div class="landpage-div1">
+    <div class="landpage-title">
+            <h1>Plan Your Event Effortlessly</h1>
+                <p>Connect with trusted organizers and suppliers. Customize your event with AI-powered recommendations.</p>
+                    <div class="btn-row">
+                        <a href="#" class="btn btn-solid">Use AI Planner</a>
+                        <a href="#" class="btn btn-outline">Find Organizer</a>
+                    </div>
+    </div>
+</div>
+
+
+	<div class="float-img">
+		<img src="~/img/landpage/lp2.jpg" />
+    </div>
+
+    <div class="landpage-div2">
+        <div class="feature-container">
+            <!-- Left Box -->
+            <div class="feature-box">
+                <i class="bi bi-person-fill icon-style"></i>
+                <h3>Find Organizers</h3>
+                <p>Hire experienced event coordinators to manage your event.</p>
+            </div>
+
+            <!-- Middle Box -->
+            <div class="feature-box">
+                <i class="bi bi-shop icon-style"></i>
+                <h3>Browse Services</h3>
+                <p>Choose from photographers, caterers, lights & sounds, and more.</p>
+            </div>
+
+            <!-- Right Box -->
+            <div class="feature-box">
+                <i class="bi bi-magic icon-style"></i>
+                <h3>AI Recommendations</h3>
+                <p>Let our AI suggest the best options based on your needs.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="landpage-div3">
+        <div class="featured-events">
+            <h2 class="featured-title">Featured Organizers and Suppliers</h2>
+            <div class="event-img"></div>
+            <h3 class="event-title">Event Title</h3>
+
+            <div class="event-scroll">
+                <div class="event-box grey-1">Event 1</div>
+                <div class="event-box grey-2">Event 2</div>
+                <div class="event-box grey-3">Event 3</div>
+                <div class="event-box grey-4">Event 4</div>
+                <div class="event-box grey-5">Event 5</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="landpage-div4">
+        <h1>Explore Event Services</h1>
+        <h2>Find trusted suppliers for catering, photography, hosting and more.</h2>
+
+        <div class="lp4-container">
+            <div class="lp4-card">
+                <i class="bi bi-fork-knife icon-style"></i>
+                <h3>Catering Services</h3>
+                <p>Delicious menus for any occasion.</p>
+            </div>
+
+            <div class="lp4-card">
+                <i class="bi bi-camera icon-style"></i>
+                <h3>Photography and Videography</h3>
+                <p>Capture every moment beautifully.</p>
+            </div>
+
+            <div class="lp4-card">
+                <i class="bi bi-music-note-beamed icon-style"></i>
+                <h3>Lights and Sounds</h3>
+                <p>Set the mood with professional equipment.</p>
+            </div>
+        </div>
+    </div>
+
+
+<div class="landpage-div5">
+    <div class="lp5-container">
+        <h2>From Vision to Venue - AI Makes It Happen</h2>
+        <h1>Tell us your budget, location and preferences - we'll handle the rest.</h1>
+
+        <div class="lp5-card">
+            <p>Awesome I found 2 catering services, 3 photographers, and a venue that fits your budget and location. Here are the top picks</p>
+            <p>1. Elegance Catering Services</p>
+                <div class="lp5-card-textarea">
+                <p>I'm planning a birthday party in Quezon City with a 50,000 budget</p>
+            </div>
+        </div>
+            <div class="btn-row">
+                <a href="#" class="btn btn-solid">Try AI Planner</a>
+                <a href="#" class="btn btn-outline">Customize My Event</a>
+            </div>
+    </div>
+
+
+</div>
+</div>
+
+
+
+<script src="~/js/landpage.js"></script>

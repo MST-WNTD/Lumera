@@ -1,0 +1,477 @@
+﻿@model Lumera.Models.Service
+@{
+    ViewData["Title"] = "Create Service - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Fixed Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Organizer Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">
+                            @(ViewBag.Organizer?.BusinessName ?? "Business Name")
+                        </p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Organizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2 overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/organizer/services">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/earnings">
+                    <span class="material-symbols-outlined">payments</span> Earnings & Payouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/profile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/home/index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area (with margin for fixed sidebar) -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Fixed Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-10">
+                <div class="flex items-center gap-4">
+                    <a href="/organizer/services" class="p-2 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg">
+                        <span class="material-symbols-outlined text-stone-600 dark:text-stone-300">arrow_back</span>
+                    </a>
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Create New Service</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    @await Html.PartialAsync("_OrganizerNotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="max-w-6xl mx-auto space-y-6">
+                    <!-- Service Details Form Card -->
+                    <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-8">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Service Details</h2>
+
+                        <form id="createServiceForm">
+                            <div class="space-y-6">
+                                <!-- Service Name -->
+                                <div>
+                                    <label for="serviceName" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <span class="material-symbols-outlined text-primary text-lg">design_services</span>
+                                        Service Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text"
+                                           id="serviceName"
+                                           name="ServiceName"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                           placeholder="e.g., Wedding Planning, Catering Service"
+                                           required />
+                                </div>
+
+                                <!-- Service Description -->
+                                <div>
+                                    <label for="serviceDescription" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <span class="material-symbols-outlined text-primary text-lg">description</span>
+                                        Service Description <span class="text-red-500">*</span>
+                                    </label>
+                                    <textarea id="serviceDescription"
+                                              name="ServiceDescription"
+                                              rows="4"
+                                              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                                              placeholder="Describe your service in detail..."
+                                              required></textarea>
+                                </div>
+
+                                <!-- Category and Price Type Row -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Category -->
+                                    <div>
+                                        <label for="category" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <span class="material-symbols-outlined text-primary text-lg">category</span>
+                                            Category <span class="text-red-500">*</span>
+                                        </label>
+                                        <select id="category"
+                                                name="Category"
+                                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                                required>
+                                            <option value="">Select Category</option>
+                                            <option value="Wedding Planning">Wedding Planning</option>
+                                            <option value="Catering">Catering</option>
+                                            <option value="Photography">Photography</option>
+                                            <option value="Videography">Videography</option>
+                                            <option value="Venue">Venue</option>
+                                            <option value="Entertainment">Entertainment</option>
+                                            <option value="Decoration">Decoration</option>
+                                            <option value="Transportation">Transportation</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Price Type -->
+                                    <div>
+                                        <label for="priceType" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <span class="material-symbols-outlined text-primary text-lg">sell</span>
+                                            Price Type
+                                        </label>
+                                        <select id="priceType"
+                                                name="PriceType"
+                                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent">
+                                            <option value="Per Event">Per Event</option>
+                                            <option value="Per Hour">Per Hour</option>
+                                            <option value="Per Day">Per Day</option>
+                                            <option value="Per Person">Per Person</option>
+                                            <option value="Package">Package</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Base Price and Final Price Row -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Base Price -->
+                                    <div>
+                                        <label for="basePrice" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <span class="material-symbols-outlined text-primary text-lg">payments</span>
+                                            Base Price <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₱</span>
+                                            <input type="number"
+                                                   id="basePrice"
+                                                   name="BasePrice"
+                                                   step="0.01"
+                                                   min="0"
+                                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                                   placeholder="0.00"
+                                                   required />
+                                        </div>
+                                    </div>
+
+                                    <!-- Final Price -->
+                                    <div>
+                                        <label for="price" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <span class="material-symbols-outlined text-primary text-lg">attach_money</span>
+                                            Final Price <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₱</span>
+                                            <input type="number"
+                                                   id="price"
+                                                   name="Price"
+                                                   step="0.01"
+                                                   min="0"
+                                                   class="w-full pl-8 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                                   placeholder="0.00"
+                                                   required />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Location -->
+                                <div>
+                                    <label for="location" class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+                                        Service Location
+                                    </label>
+                                    <input type="text"
+                                           id="location"
+                                           name="Location"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-stone-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
+                                           placeholder="e.g., Metro Manila, Quezon City" />
+                                </div>
+
+                                <!-- Active Service Checkbox -->
+                                <div class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                    <input type="checkbox"
+                                           id="isActive"
+                                           name="IsActive"
+                                           checked
+                                           class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                                    <div class="flex-1">
+                                        <label for="isActive" class="font-medium text-gray-900 dark:text-white cursor-pointer">
+                                            Active Service
+                                        </label>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Make this service visible and bookable by clients</p>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="flex justify-end gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                    <a href="/organizer/services"
+                                       class="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-stone-800 font-medium transition-all">
+                                        Cancel
+                                    </a>
+                                    <button type="submit"
+                                            class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium shadow-md transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                        <span class="material-symbols-outlined text-sm">add</span>
+                                        Create Service
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Help Card -->
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                        <div class="flex items-start gap-3">
+                            <div class="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">help</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-blue-900 dark:text-blue-300 mb-2">Tips for Creating Your Service</h4>
+                                <ul class="text-sm text-blue-800 dark:text-blue-400 space-y-1">
+                                    <li>• Use a clear, descriptive name that clients can easily understand</li>
+                                    <li>• Provide detailed descriptions including what's included in your service</li>
+                                    <li>• Set competitive prices based on your market research</li>
+                                    <li>• Base price is your starting rate, final price includes all fees</li>
+                                    <li>• Active services will be visible to clients immediately</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/organizer-notifications.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('createServiceForm');
+
+            // Format price inputs on blur
+            const priceInputs = ['basePrice', 'price'];
+            priceInputs.forEach(id => {
+                const input = document.getElementById(id);
+                input.addEventListener('blur', function(e) {
+                    if (e.target.value) {
+                        const value = parseFloat(e.target.value);
+                        if (!isNaN(value)) {
+                            e.target.value = value.toFixed(2);
+                        }
+                    }
+                });
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get form values
+                const serviceName = document.getElementById('serviceName').value.trim();
+                const serviceDescription = document.getElementById('serviceDescription').value.trim();
+                const category = document.getElementById('category').value;
+                const basePrice = parseFloat(document.getElementById('basePrice').value);
+                const price = parseFloat(document.getElementById('price').value);
+
+                // Validation
+                if (!serviceName) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Service name is required',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                if (!serviceDescription) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Service description is required',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                if (!category) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Please select a category',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                if (isNaN(basePrice) || basePrice <= 0) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Base price must be greater than 0',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                if (isNaN(price) || price <= 0) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Final price must be greater than 0',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                    return;
+                }
+
+                // Confirmation dialog
+                Swal.fire({
+                    title: 'Create Service?',
+                    text: "Are you sure you want to create this new service?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#13a4ec',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Yes, create it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        createService();
+                    }
+                });
+            });
+
+            function createService() {
+                const data = {
+                    ServiceName: document.getElementById('serviceName').value.trim(),
+                    ServiceDescription: document.getElementById('serviceDescription').value.trim(),
+                    Category: document.getElementById('category').value,
+                    PriceType: document.getElementById('priceType').value,
+                    BasePrice: parseFloat(document.getElementById('basePrice').value),
+                    Price: parseFloat(document.getElementById('price').value),
+                    Location: document.getElementById('location').value.trim() || null,
+                    IsActive: document.getElementById('isActive').checked
+                };
+
+                console.log('Sending data:', data);
+
+                // Show loading
+                Swal.fire({
+                    title: 'Creating Service...',
+                    text: 'Please wait while we create your service',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // AJAX call
+                fetch('/Organizer/CreateService', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.json();
+                })
+                .then(result => {
+                    console.log('Result:', result);
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Your service has been created successfully.',
+                            icon: 'success',
+                            confirmButtonColor: '#13a4ec'
+                        }).then(() => {
+                            window.location.href = '/organizer/services';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: result.message || 'Failed to create service. Please try again.',
+                            icon: 'error',
+                            confirmButtonColor: '#13a4ec'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while creating your service.',
+                        icon: 'error',
+                        confirmButtonColor: '#13a4ec'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+﻿@model Lumera.Models.OrganizerEarningsViewModel
+@using Lumera.Services
+@{
+    ViewData["Title"] = "Earnings & Payouts - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Fixed Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Organizer Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(Model.Organizer?.BusinessName ?? "Business")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Organizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2 overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/services">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                    @if (Model.UnreadMessages > 0)
+                    {
+                        <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-auto">@Model.UnreadMessages</span>
+                    }
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/organizer/earnings">
+                    <span class="material-symbols-outlined">payments</span> Earnings & Payouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/profile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" asp-controller="Home" asp-action="Index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area with margin for fixed sidebar -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Fixed Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-10">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Earnings & Payouts</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Track your earnings and manage payouts</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-stone-400">search</span>
+                        <input class="bg-background-light dark:bg-stone-800 border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary" placeholder="Search transactions..." type="text" />
+                    </div>
+                    @await Html.PartialAsync("_OrganizerNotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Main Content with top margin for fixed header -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Earnings Overview</h2>
+                    <div class="flex gap-2">
+                        <button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-md hover:bg-opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark" id="exportBtn">
+                            <span class="material-symbols-outlined">download</span>
+                            <span>Export Report</span>
+                        </button>
+                        <button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-primary text-primary font-bold text-sm hover:bg-primary/10 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark" id="payoutBtn">
+                            <span class="material-symbols-outlined">payments</span>
+                            <span>Request Payout</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white dark:bg-background-dark rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">paid</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">₱@Model.TotalEarnings.ToString("N2")</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Total Earnings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-background-dark rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">account_balance_wallet</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">₱@Model.AvailableBalance.ToString("N2")</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Available Balance</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-background-dark rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">trending_up</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">₱@Model.MonthlyEarnings.ToString("N2")</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">This Month</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-background-dark rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400">pending</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">₱@Model.PendingPayouts.ToString("N2")</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Pending Payouts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Payout Method -->
+                    <div class="lg:col-span-1 bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Payout Method</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary">account_balance</span>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800 dark:text-gray-200">Bank Transfer</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">**** 1234</p>
+                                </div>
+                            </div>
+                            <button class="w-full text-primary text-sm font-medium text-center flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-lg">add_circle</span> Add Payout Method
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Next Payout -->
+                    <div class="lg:col-span-2 bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Next Payout</h3>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-900 dark:text-white">₱@Model.NextPayoutAmount.ToString("N2")</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Scheduled for @Model.NextPayoutDate.ToString("MMM dd, yyyy")</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Available Balance</p>
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">₱@Model.AvailableBalance.ToString("N2")</p>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                <div class="bg-primary h-2 rounded-full" style="width: @(Model.PayoutProgress)%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">@(Model.PayoutProgress)% of minimum payout threshold reached</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Transaction History</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700/50">
+                            <thead class="bg-gray-50 dark:bg-gray-800/20">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Description</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Amount</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-background-dark divide-y divide-gray-200 dark:divide-gray-700/50">
+                                @foreach (var transaction in Model.Transactions)
+                                {
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-white/5">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">@transaction.TransactionDate.ToString("MMM dd, yyyy")</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                            @transaction.TransactionType - @(transaction.Booking?.Service?.ServiceName ?? "Service")
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                            @if (transaction.Booking?.Client != null)
+                                            {
+                                                @($"{transaction.Booking.Client.User?.FirstName} {transaction.Booking.Client.User?.LastName}")
+                                            }
+                                            else if (transaction.Payer != null)
+                                            {
+                                                @($"{transaction.Payer.FirstName} {transaction.Payer.LastName}")
+                                            }
+                                            else
+                                            {
+                                                <span class="text-gray-400">N/A</span>
+                                            }
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold @(transaction.Amount >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")">
+                                            ₱@transaction.Amount.ToString("N2")
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            @{
+                                                var statusClass = transaction.Status.ToLower() switch
+                                                {
+                                                    "completed" => "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                                                    "pending" => "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                                                    "failed" => "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                                                    _ => "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                                                };
+                                            }
+                                            <span class="px-2 py-1 text-xs rounded-full @statusClass">@transaction.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (!Model.Transactions.Any())
+                    {
+                        <div class="text-center py-12">
+                            <span class="material-symbols-outlined text-gray-300 dark:text-gray-600 text-6xl mb-4">paid</span>
+                            <p class="text-gray-500 dark:text-gray-400">No transactions yet</p>
+                        </div>
+                    }
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/organizer-notifications.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Search functionality
+            const searchInput = document.querySelector('input[placeholder="Search transactions..."]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const rows = document.querySelectorAll('tbody tr');
+
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }
+
+            // Export report button
+            const exportBtn = document.getElementById('exportBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function() {
+                    alert('Export feature coming soon!');
+                });
+            }
+
+            // Request Payout Button - PESO VERSION
+            const payoutBtn = document.getElementById('payoutBtn');
+            if (payoutBtn) {
+                payoutBtn.addEventListener('click', async function() {
+                    const availableBalanceText = document.querySelector('.text-lg.font-semibold')?.textContent || '₱0.00';
+                    const availableBalance = parseFloat(availableBalanceText.replace(/[^0-9.]/g, ''));
+
+                    if (availableBalance <= 0) {
+                        alert('You have no available balance to withdraw.');
+                        return;
+                    }
+
+                    const minimumPayout = 1000; // ₱1,000 minimum
+                    if (availableBalance < minimumPayout) {
+                        alert(`Minimum payout is ₱${minimumPayout.toLocaleString('en-PH', {minimumFractionDigits: 2})}. Your balance: ${availableBalanceText}`);
+                        return;
+                    }
+
+                    const amountInput = prompt(
+                        `Enter payout amount (Available: ${availableBalanceText}):\n\nMinimum: ₱${minimumPayout.toLocaleString('en-PH', {minimumFractionDigits: 2})}`,
+                        availableBalance.toFixed(2)
+                    );
+
+                    if (amountInput === null) return;
+
+                    const requestedAmount = parseFloat(amountInput);
+
+                    if (isNaN(requestedAmount) || requestedAmount <= 0) {
+                        alert('Please enter a valid amount.');
+                        return;
+                    }
+
+                    if (requestedAmount < minimumPayout) {
+                        alert(`Minimum payout is ₱${minimumPayout.toLocaleString('en-PH', {minimumFractionDigits: 2})}`);
+                        return;
+                    }
+
+                    if (requestedAmount > availableBalance) {
+                        alert(`Insufficient balance. Available: ${availableBalanceText}`);
+                        return;
+                    }
+
+                    const formattedAmount = `₱${requestedAmount.toLocaleString('en-PH', {minimumFractionDigits: 2})}`;
+                    if (!confirm(`Request payout of ${formattedAmount}?\n\nProcessed in 3-5 business days.`)) {
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch('/organizer/earnings/request-payout', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                amount: requestedAmount,
+                                payoutMethod: 'Bank Transfer'
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            alert(result.message);
+                            window.location.reload();
+                        } else {
+                            alert(result.message || 'Failed to request payout');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+﻿@* File: Views/Shared/_NotificationDropdown.cshtml *@
+@* This is a reusable partial view for the notification system *@
+
+<!-- Notification Bell with Dropdown -->
+<div class="relative" id="notificationContainer">
+    <button id="notificationBtn" class="relative p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300">
+        <span class="material-symbols-outlined">notifications</span>
+        <span id="notificationBadge" class="hidden absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center notification-badge">0</span>
+    </button>
+
+    <!-- Notification Dropdown -->
+    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-96 bg-white dark:bg-stone-900 rounded-xl shadow-lg border border-stone-200 dark:border-stone-800 z-50">
+        <div class="p-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center">
+            <h3 class="font-bold text-stone-900 dark:text-white">Notifications</h3>
+            <button id="markAllReadBtn" class="text-sm text-primary hover:underline">Mark all read</button>
+        </div>
+        <div id="notificationList" class="notification-dropdown">
+            <div class="p-8 text-center text-stone-500 dark:text-stone-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block">notifications_off</span>
+                <p>No notifications</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Notification Badge Pulse Animation */
+    .notification-badge {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: .5;
+        }
+    }
+
+    /* Notification dropdown styles */
+    .notification-dropdown {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .notification-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .notification-dropdown::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .notification-dropdown::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+    }
+
+    .notification-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    /* Fix notification text overflow */
+    .notification-item {
+        max-width: 100%;
+    }
+
+    .notification-item p {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+</style>

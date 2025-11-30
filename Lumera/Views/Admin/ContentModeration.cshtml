@@ -1,0 +1,611 @@
+﻿@model Lumera.Models.AdminViewModels.ContentModerationViewModel
+@{
+    ViewData["Title"] = "Content Moderation - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet" />
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">admin_panel_settings</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Admin Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">Administrator</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Admin</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300"
+                   href="@Url.Action("Index", "Admin")">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300"
+                   href="@Url.Action("UserManagement", "Admin")">
+                    <span class="material-symbols-outlined">group</span> User Management
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold"
+                   href="@Url.Action("ContentModeration", "Admin")">
+                    <span class="material-symbols-outlined">content_paste</span> Content Moderation
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <form method="post" asp-controller="Account" asp-action="Logout" class="w-full">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300 w-full text-left">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col ml-64">
+            <<!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Content Moderation</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Review and approve user-generated content</p>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+
+                <!-- Page Title -->
+                <div class="mb-8"></div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400">design_services</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.PendingServicesCount</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Pending Services</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-red-600 dark:text-red-400">flag</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.FlaggedReviewsCount</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Flagged Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-orange-100 dark:bg-orange-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-orange-600 dark:text-orange-400">report</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.ReportedUsersCount</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Reported Users</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">event</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.PendingEventsCount</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Pending Events</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Approvals Section -->
+                <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-stone-900 dark:text-white">Service Approvals</h3>
+                            <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">New services submitted by providers are awaiting your approval.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <select class="pl-4 pr-10 py-2 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-sm" id="serviceCategoryFilter">
+                                    <option value="all">All Categories</option>
+                                    @foreach (var category in Model.ServiceCategories)
+                                    {
+                                        <option value="@category">@category</option>
+                                    }
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm">arrow_drop_down</span>
+                            </div>
+                            <div class="relative">
+                                <select class="pl-4 pr-10 py-2 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-sm" id="serviceProviderFilter">
+                                    <option value="all">All Providers</option>
+                                    <option value="organizer">Organizer</option>
+                                    <option value="supplier">Supplier</option>
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm">arrow_drop_down</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-sm text-stone-500 dark:text-stone-400">
+                                <tr>
+                                    <th class="p-3 font-medium">Service Name</th>
+                                    <th class="p-3 font-medium">Provider</th>
+                                    <th class="p-3 font-medium">Category</th>
+                                    <th class="p-3 font-medium">Provider Type</th>
+                                    <th class="p-3 font-medium">Status</th>
+                                    <th class="p-3 font-medium">Submitted</th>
+                                    <th class="p-3 font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="services-table-body" class="divide-y divide-stone-200 dark:divide-stone-800">
+                                @foreach (var service in Model.PendingServices)
+                                {
+                                    <tr class="text-sm service-row hover:bg-stone-50 dark:hover:bg-stone-800/50"
+                                        data-category="@service.Category.ToLower()"
+                                        data-provider="@service.ProviderType.ToLower()">
+                                        <td class="p-3 font-medium text-stone-900 dark:text-white whitespace-nowrap">@service.ServiceName</td>
+                                        <td class="p-3">@service.ProviderName</td>
+                                        <td class="p-3">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary dark:bg-primary/20">@service.Category</span>
+                                        </td>
+                                        <td class="p-3">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">@service.ProviderType</span>
+                                        </td>
+                                        <td class="p-3">
+                                            <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
+                                        </td>
+                                        <td class="p-3">@service.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                        <td class="p-3">
+                                            <div class="flex items-center gap-2">
+                                                <button class="bg-primary text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-primary/90 flex items-center gap-1 approve-service" data-id="@service.ServiceID" data-provider-type="@service.ProviderType.ToLower()">
+                                                    <span class="material-symbols-outlined text-sm">check</span> Approve
+                                                </button>
+                                                <button class="bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/80 flex items-center gap-1 reject-service" data-id="@service.ServiceID" data-provider-type="@service.ProviderType.ToLower()">
+                                                    <span class="material-symbols-outlined text-sm">close</span> Reject
+                                                </button>
+                                                <button class="bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-stone-200 dark:hover:bg-stone-600 flex items-center gap-1 view-service" data-id="@service.ServiceID">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span> View
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!Model.PendingServices.Any())
+                                {
+                                    <tr>
+                                        <td colspan="7" class="p-8 text-center text-stone-500 dark:text-stone-400">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span class="material-symbols-outlined text-4xl mb-2 text-stone-300 dark:text-stone-600">design_services</span>
+                                                <p class="text-sm">No pending services found.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Review Moderation Section -->
+                <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-stone-900 dark:text-white">Review Moderation</h3>
+                            <p class="text-stone-500 dark:text-stone-400 text-sm mt-1">View and manage user-submitted reviews. All reviews are automatically approved.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <select class="pl-4 pr-10 py-2 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-sm" id="reviewServiceFilter">
+                                    <option value="all">All Services</option>
+                                    @foreach (var service in Model.PendingReviews.Select(r => r.ServiceName).Distinct())
+                                    {
+                                        <option value="@service">@service</option>
+                                    }
+                                </select>
+                                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 text-sm">arrow_drop_down</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-sm text-stone-500 dark:text-stone-400">
+                                <tr>
+                                    <th class="p-3 font-medium">Reviewer</th>
+                                    <th class="p-3 font-medium">Service</th>
+                                    <th class="p-3 font-medium">Rating</th>
+                                    <th class="p-3 font-medium">Review</th>
+                                    <th class="p-3 font-medium">Date</th>
+                                    <th class="p-3 font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviews-table-body" class="divide-y divide-stone-200 dark:divide-stone-800">
+                                @foreach (var review in Model.PendingReviews)
+                                {
+                                    <tr class="text-sm review-row hover:bg-stone-50 dark:hover:bg-stone-800/50"
+                                        data-service="@review.ServiceName.ToLower()">
+                                        <td class="p-3 font-medium text-stone-900 dark:text-white whitespace-nowrap">@review.ReviewerName</td>
+                                        <td class="p-3">@review.ServiceName</td>
+                                        <td class="p-3">
+                                            <div class="flex items-center gap-1">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <span class="material-symbols-outlined text-sm @(i <= review.Rating ? "text-yellow-500" : "text-gray-300")">star</span>
+                                                }
+                                                <span class="text-sm text-stone-600 dark:text-stone-400 ml-1">(@review.Rating)</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-3 max-w-xs">
+                                            <div class="text-sm text-stone-600 dark:text-stone-400 truncate" title="@review.ReviewText">
+                                                @(string.IsNullOrEmpty(review.ReviewText) ? "(No comment)" : review.ReviewText)
+                                            </div>
+                                        </td>
+                                        <td class="p-3 text-sm text-stone-600 dark:text-stone-400">
+                                            @review.CreatedAt.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td class="p-3">
+                                            <div class="flex items-center gap-2">
+                                                <button class="bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-stone-200 dark:hover:bg-stone-600 flex items-center gap-1 view-review"
+                                                        data-id="@review.ReviewID"
+                                                        data-reviewer="@review.ReviewerName"
+                                                        data-service="@review.ServiceName"
+                                                        data-rating="@review.Rating"
+                                                        data-text="@review.ReviewText"
+                                                        data-date="@review.CreatedAt.ToString("MMM dd, yyyy")">
+                                                    <span class="material-symbols-outlined text-sm">visibility</span> View
+                                                </button>
+                                                <button class="bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-red-200 dark:hover:bg-red-900/80 flex items-center gap-1 remove-review" data-id="@review.ReviewID">
+                                                    <span class="material-symbols-outlined text-sm">delete</span> Remove
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!Model.PendingReviews.Any())
+                                {
+                                    <tr>
+                                        <td colspan="6" class="p-8 text-center text-stone-500 dark:text-stone-400">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <span class="material-symbols-outlined text-4xl mb-2 text-stone-300 dark:text-stone-600">reviews</span>
+                                                <p class="text-sm">No reviews found.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="reviewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-xl max-w-2xl w-full p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-stone-900 dark:text-white">Review Details</h3>
+                            <button onclick="closeReviewModal()" class="text-stone-400 hover:text-stone-600 dark:hover:text-stone-300">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-medium text-stone-500 dark:text-stone-400">Reviewer</label>
+                                <p id="modal-reviewer" class="text-stone-900 dark:text-white font-medium"></p>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-stone-500 dark:text-stone-400">Service</label>
+                                <p id="modal-service" class="text-stone-900 dark:text-white"></p>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-stone-500 dark:text-stone-400">Rating</label>
+                                <div id="modal-rating" class="flex items-center gap-1 mt-1"></div>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-stone-500 dark:text-stone-400">Review Text</label>
+                                <p id="modal-text" class="text-stone-900 dark:text-white mt-1"></p>
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-medium text-stone-500 dark:text-stone-400">Date Submitted</label>
+                                <p id="modal-date" class="text-stone-900 dark:text-white"></p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-3 mt-6">
+                            <button onclick="closeReviewModal()" class="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 dark:bg-stone-700 dark:text-white hover:bg-stone-200 dark:hover:bg-stone-600">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <script>
+                document.addEventListener('DOMContentLoaded', function() {
+            // Service moderation actions
+            document.querySelectorAll('.approve-service').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const serviceId = this.getAttribute('data-id');
+                    const providerType = this.getAttribute('data-provider-type');
+                    moderateService(serviceId, 'approve', providerType);
+                });
+            });
+
+            document.querySelectorAll('.reject-service').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const serviceId = this.getAttribute('data-id');
+                    const providerType = this.getAttribute('data-provider-type');
+                    if (confirm('Are you sure you want to reject this service? This action cannot be undone.')) {
+                        moderateService(serviceId, 'reject', providerType);
+                    }
+                });
+            });
+
+            document.querySelectorAll('.view-service').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const serviceId = this.getAttribute('data-id');
+                    viewService(serviceId);
+                });
+            });
+
+            // Review moderation actions - REMOVED APPROVE, ONLY VIEW AND REMOVE
+            document.querySelectorAll('.view-review').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const reviewId = this.getAttribute('data-id');
+                    const reviewer = this.getAttribute('data-reviewer');
+                    const service = this.getAttribute('data-service');
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const text = this.getAttribute('data-text');
+                    const date = this.getAttribute('data-date');
+
+                    showReviewModal(reviewer, service, rating, text, date);
+                });
+            });
+
+            document.querySelectorAll('.remove-review').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const reviewId = this.getAttribute('data-id');
+                    if (confirm('Are you sure you want to remove this review? This action cannot be undone and will recalculate provider ratings.')) {
+                        moderateReview(reviewId, 'remove');
+                    }
+                });
+            });
+
+            // Filter functionality
+            document.getElementById('serviceCategoryFilter').addEventListener('change', filterServices);
+            document.getElementById('serviceProviderFilter').addEventListener('change', filterServices);
+            document.getElementById('reviewServiceFilter').addEventListener('change', filterReviews);
+        });
+
+        async function moderateService(serviceId, action, providerType) {
+            try {
+                const response = await fetch('@Url.Action("ModerateService", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({
+                        serviceId: serviceId,
+                        action: action,
+                        providerType: providerType
+                    })
+                });
+
+                if (response.ok) {
+                    const row = document.querySelector(`.approve-service[data-id="${serviceId}"]`).closest('tr');
+                    row.remove();
+                    showNotification('Service ' + action + 'd successfully', 'success');
+                    updateEmptyState('services-table-body', 'No services found matching the selected filters.');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    const error = await response.text();
+                    showNotification('Error moderating service: ' + error, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error moderating service', 'error');
+            }
+        }
+
+        async function moderateReview(reviewId, action) {
+            try {
+                const response = await fetch('@Url.Action("ModerateReview", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({ reviewId: reviewId, action: action })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const row = document.querySelector(`.remove-review[data-id="${reviewId}"]`).closest('tr');
+                    row.remove();
+                    showNotification('Review removed successfully. Provider ratings updated.', 'success');
+                    updateEmptyState('reviews-table-body', 'No reviews found matching the selected filters.');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error removing review', 'error');
+            }
+        }
+
+        function showReviewModal(reviewer, service, rating, text, date) {
+            document.getElementById('modal-reviewer').textContent = reviewer;
+            document.getElementById('modal-service').textContent = service;
+            document.getElementById('modal-text').textContent = text || '(No comment provided)';
+            document.getElementById('modal-date').textContent = date;
+
+            // Create star rating display
+            const ratingContainer = document.getElementById('modal-rating');
+            ratingContainer.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('span');
+                star.className = 'material-symbols-outlined text-lg ' + (i <= rating ? 'text-yellow-500' : 'text-gray-300');
+                star.textContent = 'star';
+                ratingContainer.appendChild(star);
+            }
+            const ratingText = document.createElement('span');
+            ratingText.className = 'text-sm text-stone-600 dark:text-stone-400 ml-2';
+            ratingText.textContent = `(${rating}/5)`;
+            ratingContainer.appendChild(ratingText);
+
+            document.getElementById('reviewModal').classList.remove('hidden');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal').classList.add('hidden');
+        }
+
+        function viewService(serviceId) {
+            window.location.href = '@Url.Action("ServiceDetails", "Admin")' + '?id=' + serviceId;
+        }
+
+        function filterServices() {
+            const category = document.getElementById('serviceCategoryFilter').value;
+            const provider = document.getElementById('serviceProviderFilter').value;
+            const rows = document.querySelectorAll('#services-table-body .service-row');
+
+            rows.forEach(row => {
+                const rowCategory = row.getAttribute('data-category');
+                const rowProvider = row.getAttribute('data-provider');
+                const matchesCategory = category === 'all' || rowCategory.includes(category.toLowerCase());
+                const matchesProvider = provider === 'all' || rowProvider.includes(provider.toLowerCase());
+
+                row.style.display = (matchesCategory && matchesProvider) ? '' : 'none';
+            });
+
+            updateEmptyState('services-table-body', 'No services found matching the selected filters.');
+        }
+
+        function filterReviews() {
+            const service = document.getElementById('reviewServiceFilter').value;
+            const rows = document.querySelectorAll('#reviews-table-body .review-row');
+
+            rows.forEach(row => {
+                const rowService = row.getAttribute('data-service');
+                const matchesService = service === 'all' || rowService.includes(service.toLowerCase());
+                row.style.display = matchesService ? '' : 'none';
+            });
+
+            updateEmptyState('reviews-table-body', 'No reviews found matching the selected filters.');
+        }
+
+        function updateEmptyState(tableBodyId, message) {
+            const tableBody = document.getElementById(tableBodyId);
+            const visibleRows = Array.from(tableBody.querySelectorAll('tr'))
+                .filter(row => !row.classList.contains('empty-state') && row.style.display !== 'none').length;
+
+            const existingEmptyRow = tableBody.querySelector('.empty-state');
+            if (existingEmptyRow) existingEmptyRow.remove();
+
+            if (visibleRows === 0) {
+                const emptyRow = document.createElement('tr');
+                emptyRow.className = 'empty-state';
+                const colCount = tableBodyId === 'services-table-body' ? 7 : 6;
+                emptyRow.innerHTML = `<td colspan="${colCount}" class="p-8 text-center text-stone-500 dark:text-stone-400">
+                    <div class="flex flex-col items-center justify-center">
+                        <span class="material-symbols-outlined text-4xl mb-2 text-stone-300 dark:text-stone-600">${tableBodyId === 'services-table-body' ? 'design_services' : 'reviews'}</span>
+                        <p class="text-sm">${message}</p>
+                    </div>
+                </td>`;
+                tableBody.appendChild(emptyRow);
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transform transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

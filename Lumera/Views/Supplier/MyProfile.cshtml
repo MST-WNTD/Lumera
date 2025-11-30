@@ -1,0 +1,188 @@
+﻿@model Lumera.Models.SupplierProfileViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Lumera - My Profile</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope:wght@400;500;700;800" onload="this.rel='stylesheet'" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark/80 shadow-md flex-col hidden lg:flex">
+            <div class="flex items-center gap-4 p-6 border-b border-slate-200 dark:border-slate-800">
+                <div class="w-10 h-10 text-primary">
+                    <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+                        <path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Lumera</h2>
+            </div>
+            <nav class="flex-1 p-4 space-y-2">
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 rounded-lg bg-primary/10 text-primary dark:bg-primary/20" href="/Supplier/Dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyEvents">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyServices">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Messages">
+                    <span class="material-symbols-outlined">chat</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/MyProfile">
+                    <span class="material-symbols-outlined">person</span> My Profile
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary dark:hover:bg-primary/20 rounded-lg transition-colors" href="/Supplier/Earnings">
+                    <span class="material-symbols-outlined">paid</span> Earnings & Payouts
+                </a>
+            </nav>
+        </aside>
+    </div>
+    <main class="flex-1 bg-background-light dark:bg-background-dark">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white">My Profile</h1>
+                <button type="submit" form="profileForm" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                    Save Changes
+                </button>
+            </div>
+
+            <form id="profileForm" method="post" asp-action="UpdateProfile">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Profile Information -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Business Information -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Business Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Business Name</label>
+                                    <input type="text" name="Supplier.BusinessName" value="@Model.Supplier.BusinessName" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Service Category</label>
+                                    <input type="text" name="Supplier.ServiceCategory" value="@Model.Supplier.ServiceCategory" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Business Description</label>
+                                    <textarea name="Supplier.BusinessDescription" class="w-full h-24 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 text-sm p-3 focus:ring-primary focus:border-primary">@Model.Supplier.BusinessDescription</textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Years of Experience</label>
+                                    <input type="number" name="Supplier.YearsOfExperience" value="@Model.Supplier.YearsOfExperience" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Service Areas</label>
+                                    <input type="text" name="Supplier.ServiceAreas" value="@Model.Supplier.ServiceAreas" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4">Contact Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">First Name</label>
+                                    <input type="text" name="User.FirstName" value="@Model.User.FirstName" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
+                                    <input type="text" name="User.LastName" value="@Model.User.LastName" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
+                                    <input type="email" value="@Model.User.Email" readonly class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Phone</label>
+                                    <input type="tel" name="User.Phone" value="@Model.User.Phone" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Avatar URL</label>
+                                    <input type="text" name="User.AvatarURL" value="@Model.User.AvatarURL" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-background-light dark:bg-background-dark text-slate-700 dark:text-slate-300 focus:ring-primary focus:border-primary" placeholder="Enter image URL for your avatar">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Sidebar -->
+                    <div class="space-y-6">
+                        <!-- Profile Picture -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6 text-center">
+                            @if (!string.IsNullOrEmpty(Model.User.AvatarURL))
+                            {
+                                <div class="w-32 h-32 rounded-full bg-cover bg-center mx-auto mb-4" style="background-image: url('@Model.User.AvatarURL')"></div>
+                            }
+                            else
+                            {
+                                <div class="w-32 h-32 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center mx-auto mb-4">
+                                    <span class="material-symbols-outlined text-slate-400 text-4xl">person</span>
+                                </div>
+                            }
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">@Model.User.FirstName @Model.User.LastName</h3>
+                            <p class="text-slate-500 dark:text-slate-400 mb-4">@Model.Supplier.ServiceCategory</p>
+                        </div>
+
+                        <!-- Account Status -->
+                        <div class="bg-white dark:bg-background-dark/80 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Account Status</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-slate-600 dark:text-slate-400">Verification</span>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">@(Model.Supplier.IsActive ? "Active" : "Inactive")</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-600 dark:text-slate-400">Member Since</span>
+                                    <span class="text-slate-900 dark:text-white">@Model.User.CreatedAt.ToString("MMM yyyy")</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-600 dark:text-slate-400">Average Rating</span>
+                                    <span class="text-slate-900 dark:text-white">@Model.Supplier.AverageRating.ToString("0.0")</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-600 dark:text-slate-400">Total Reviews</span>
+                                    <span class="text-slate-900 dark:text-white">@Model.Supplier.TotalReviews</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

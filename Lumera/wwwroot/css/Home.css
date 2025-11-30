@@ -1,0 +1,982 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #ebf4f6;
+    color: #000;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Common Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px 44px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 10px;
+    border: none;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: #30373d;
+    color: #fff;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #eef2f5;
+    border: 1px solid #eef2f5;
+}
+
+.btn-white {
+    background: #ffffff;
+    color: #30373d;
+}
+
+.btn-outline-white {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+/* Navigation */
+.navbar {
+    background-image: url('/img/landpage/lp1.jpg');
+    background-size: cover; /* fills the whole div */
+    background-position: center; /* centers the image */
+    background-repeat: no-repeat; /* no repeat */
+    background-attachment: fixed; /* ? keeps image stationary */
+    box-shadow: none !important;
+    border: none !important;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    z-index: 1000;
+    mix-blend-mode: normal;
+}
+
+.nav-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 77px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-links {
+    color:white;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.nav-cta-btn {
+    background: #30373d;
+    color: #fff;
+    border: none;
+    padding: 18px 44px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+
+    background-image: url('/img/landpage/lp1.jpg');
+    background-size: cover; /* fills the whole div */
+    background-position: center; /* centers the image */
+    background-repeat: no-repeat; /* no repeat */
+    background-attachment: fixed; /* ? keeps image stationary */
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-bottom-left-radius: 170px;
+    border-bottom-right-radius: 170px;
+    margin: -8vh 0;
+}
+
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-title {
+    color: #eef2f5;
+    font-size: 66px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    max-width: 1128px;
+}
+
+.hero-subtitle {
+    color: #eef2f5;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.55;
+    margin-bottom: 40px;
+    max-width: 696px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+}
+
+/* Setup Section */
+.setup-section {
+    padding: 80px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.setup-image {
+    width: 1272px;
+    height: 635px;
+    background: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047ef') no-repeat center center;
+    background-size: cover;
+    border-radius: 40px;
+}
+
+/* Features Section */
+.features-section {
+    padding: 80px 0;
+}
+
+.features-container {
+    max-width: 1704px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 0 108px;
+}
+
+.feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex: 1;
+}
+
+.feature-icon {
+    flex-shrink: 0;
+    width: 51px;
+    height: 44px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.person-icon {
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e0');
+}
+
+.shop-icon {
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047f0');
+    height: 42px;
+}
+
+.magic-wand-icon {
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e9');
+    height: 49px;
+}
+
+.feature-content {
+    flex: 1;
+}
+
+    .feature-content h3 {
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 1.29;
+        margin-bottom: 16px;
+        color: #000;
+    }
+
+    .feature-content p {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.94;
+        color: #000;
+    }
+
+/* Featured Section */
+.featured-section {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #000;
+    margin-bottom: 40px;
+}
+
+.featured-image {
+    width: 1704px;
+    height: 635px;
+    margin: 0 auto;
+    background: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047f7') no-repeat center center;
+    background-size: cover;
+    border-radius: 40px;
+    box-shadow: 0 1px 4px rgba(12, 12, 13, 0.05);
+}
+
+/* Enshanted Section */
+.enshanted-section {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.enshanted-logo {
+    width: 171px;
+    height: 171px;
+    margin: 0 auto 20px;
+    background: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047ec') no-repeat center center;
+    background-size: cover;
+}
+
+.enshanted-title {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #000;
+}
+
+/* Supplier Samples */
+.supplier-samples {
+    padding: 40px 0;
+}
+
+.supplier-grid {
+    max-width: 1702px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Changed from 8 to 4 for better layout */
+    gap: 23.63px;
+    padding: 0 109px;
+}
+
+.supplier-item {
+    height: auto; /* Changed from fixed height to auto */
+    min-height: 180px; /* Minimum height for consistency */
+    border-radius: 20px;
+    background: #ffffff; /* Solid white background instead of images */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+    .supplier-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+/* Supplier info styles */
+.supplier-info {
+    padding: 20px;
+    text-align: center;
+    color: #333;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .supplier-info h4 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #315375;
+    }
+
+    .supplier-info p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+.supplier-description {
+    font-size: 12px !important;
+    color: #888 !important;
+    margin-top: 8px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.star {
+    color: #ddd;
+    font-size: 16px;
+}
+
+    .star.filled {
+        color: #ffc107;
+    }
+
+/* Explore Services */
+.explore-services {
+    position: relative;
+    height: 890px;
+    margin: 80px 0;
+}
+
+.explore-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047da') no-repeat center center;
+    background-size: cover;
+}
+
+.explore-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+}
+
+.explore-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 0.97;
+    margin-bottom: 24px;
+}
+
+.explore-subtitle {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 1004px;
+}
+
+/* Service Categories */
+.service-categories {
+    padding: 80px 0;
+}
+
+.services-container {
+    max-width: 1704px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 0 108px;
+}
+
+.service-card {
+    background: #eef2f5;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    flex: 1;
+    height: 299px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-icon {
+    margin-bottom: 20px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.chef-icon {
+    width: 87px;
+    height: 66px;
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047dc');
+}
+
+.camera-icon {
+    width: 60px;
+    height: 82px;
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e2');
+}
+
+.spotlight-icon {
+    width: 96px;
+    height: 75px;
+    background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+}
+
+.service-card h3 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: #000;
+}
+
+.service-card p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #000;
+}
+
+/* AI Planner Section */
+.ai-planner-section {
+    position: relative;
+    padding: 200px 0;
+    margin: 80px 0;
+    overflow: hidden;
+}
+
+.ai-planner-background {
+    position: absolute;
+    top: 0;
+    left: -270px;
+    width: calc(100% + 540px);
+    height: 100%;
+    background: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047ee') no-repeat center center;
+    background-size: cover;
+    border-radius: 259px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    filter: blur(7px);
+}
+
+.ai-planner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+}
+
+.ai-title {
+    font-size: 66px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    max-width: 1447px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ai-subtitle {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 0.97;
+    margin-bottom: 80px;
+    max-width: 955px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ai-chat-demo {
+    background: #fff;
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 898px;
+    margin: 0 auto 80px;
+    text-align: left;
+}
+
+.ai-response p {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    color: #000;
+    margin-bottom: 24px;
+}
+
+.ai-suggestions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+    .ai-suggestions p {
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+.suggestion-images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.suggestion-img {
+    width: 148px;
+    height: 74px;
+    border-radius: 12px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+    .suggestion-img:nth-child(1) {
+        background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e5');
+    }
+
+    .suggestion-img:nth-child(2) {
+        background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047eb');
+    }
+
+    .suggestion-img:nth-child(3) {
+        background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047de');
+    }
+
+    .suggestion-img:nth-child(4) {
+        background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047d7');
+    }
+
+.chat-input {
+    margin-top: 40px;
+}
+
+.chat-box {
+    background: #f5f5f5;
+    border-radius: 28px;
+    padding: 16px 24px;
+    max-width: 704px;
+    margin: 0 auto;
+}
+
+    .chat-box p {
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.57);
+        margin: 0;
+    }
+
+.ai-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+}
+
+/* Footer */
+.footer {
+    background: #315375;
+    border-radius: 28px 28px 0 0;
+    color: #fff;
+    padding-top: 40px;
+    margin-bottom:-8vh;
+}
+
+.footer-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 105px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-brand {
+    max-width: 696px;
+}
+
+.footer-logo {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 24px;
+}
+
+.footer-description {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.55;
+    margin-bottom: 24px;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
+.social-link {
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.footer-links {
+    display: flex;
+    gap: 93px;
+}
+
+.footer-column h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 17px;
+}
+
+.footer-column a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 11px;
+}
+
+.footer-bottom {
+    margin-top: 40px;
+}
+
+.footer-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 105px;
+}
+
+.footer-bottom-content {
+    padding: 24px 105px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .footer-bottom-content p,
+    .footer-bottom-content a {
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        text-decoration: none;
+    }
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 48px;
+    }
+
+    .features-container,
+    .services-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card,
+    .service-card {
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .supplier-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .footer-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .footer-links {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-title {
+        font-size: 36px;
+    }
+
+    .supplier-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ai-title {
+        font-size: 36px;
+    }
+
+    .ai-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .footer-bottom-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    /* Add these styles to your existing Home.css */
+
+    /* Supplier Items Styles */
+    .supplier-info {
+        padding: 15px;
+        text-align: center;
+        color: #333;
+    }
+
+        .supplier-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #315375;
+        }
+
+        .supplier-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-size: 14px;
+    }
+
+    .star {
+        color: #ddd;
+        font-size: 16px;
+    }
+
+        .star.filled {
+            color: #ffc107;
+        }
+
+    /* Database-driven element states */
+    .supplier-item {
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .supplier-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+    /* Service card enhancements */
+    .service-card {
+        transition: all 0.3s ease;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+    /* Add these styles to your existing Home.css */
+
+    /* Supplier Items Styles */
+    .supplier-info {
+        padding: 15px;
+        text-align: center;
+        color: #333;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .supplier-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #315375;
+        }
+
+        .supplier-info p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+    .supplier-description {
+        font-size: 12px !important;
+        color: #888 !important;
+        margin-top: 8px;
+        font-style: italic;
+    }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .star {
+        color: #ddd;
+        font-size: 16px;
+    }
+
+        .star.filled {
+            color: #ffc107;
+        }
+
+    /* Database-driven element states */
+    .supplier-item {
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+        .supplier-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+    /* Service card enhancements */
+    .service-card {
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+    .category-rating {
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+        margin-top: 8px;
+    }
+
+    /* Section title improvements */
+    .section-title {
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: #000;
+        margin-bottom: 40px;
+    }
+
+    /* Responsive improvements for supplier grid */
+    @media (max-width: 1200px) {
+        .supplier-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .supplier-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .section-title {
+            font-size: 36px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .supplier-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    /* Responsive design for supplier grid */
+    @media (max-width: 1200px) {
+        .supplier-grid {
+            grid-template-columns: repeat(3, 1fr);
+            padding: 0 50px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .supplier-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 20px;
+            gap: 15px;
+        }
+
+        .supplier-item {
+            min-height: 160px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .supplier-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}
