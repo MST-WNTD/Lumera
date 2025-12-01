@@ -1,0 +1,486 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Planner - LUMERA</title>
+    <link rel="stylesheet" href="~/css/Home.css" />
+    <link rel="stylesheet" href="~/css/landpage.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* AI Planner Page Specific Styles */
+        .ai-planner-hero {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-top: 5vh;
+            border-radius: 0 0 120px 120px;
+            overflow: hidden;
+        }
+
+        .ai-planner-hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #315375 0%, #1e3a5f 100%);
+            border-radius: 0 0 120px 120px;
+        }
+
+        .ai-planner-hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .ai-planner-hero-title {
+            color: #eef2f5;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            max-width: 800px;
+        }
+
+        .ai-planner-hero-subtitle {
+            color: #eef2f5;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.55;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .ai-planner-container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 40px;
+        }
+
+        .ai-planner-info {
+            flex: 1;
+        }
+
+        .ai-planner-info-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #315375;
+        }
+
+        .ai-planner-info-description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .ai-planner-features {
+            margin-bottom: 30px;
+        }
+
+        .ai-planner-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ai-planner-feature-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            background: #315375;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .ai-planner-feature-text {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .ai-planner-chat {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            background: #315375;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .chat-header h3 {
+                font-size: 20px;
+                font-weight: 600;
+                margin: 0;
+            }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+
+            .message.bot {
+                align-self: flex-start;
+                background: #f0f4f8;
+                color: #333;
+                border-bottom-left-radius: 5px;
+            }
+
+            .message.user {
+                align-self: flex-end;
+                background: #315375;
+                color: white;
+                border-bottom-right-radius: 5px;
+            }
+
+        .message-time {
+            font-size: 12px;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+        }
+
+            .chat-input:focus {
+                border-color: #315375;
+            }
+
+        .send-btn {
+            background: #315375;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .send-btn:hover {
+                background: #1e3a5f;
+            }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .suggestion {
+            background: #f0f4f8;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .suggestion:hover {
+                background: #315375;
+                color: white;
+            }
+
+        .ai-planner-steps {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+
+        .ai-planner-steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .ai-planner-steps-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #315375;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #315375;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 auto 20px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #315375;
+        }
+
+        .step-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Hero Section -->
+    <section class="ai-planner-hero">
+        <div class="ai-planner-hero-background"></div>
+        <div class="ai-planner-hero-content">
+            <h1 class="ai-planner-hero-title">AI Event Planner</h1>
+            <p class="ai-planner-hero-subtitle">Get personalized event planning assistance powered by artificial intelligence</p>
+        </div>
+    </section>
+
+    <!-- AI Planner Section -->
+    <section class="ai-planner-container">
+        <div class="ai-planner-info">
+            <h2 class="ai-planner-info-title">Plan Your Perfect Event with AI</h2>
+            <p class="ai-planner-info-description">
+                Our AI Event Planner helps you create the perfect event by understanding your needs, preferences, and budget.
+                Get personalized recommendations for venues, caterers, decor, and more.
+            </p>
+
+            <div class="ai-planner-features">
+                <div class="ai-planner-feature">
+                    <div class="ai-planner-feature-icon">✓</div>
+                    <div class="ai-planner-feature-text">Personalized event recommendations</div>
+                </div>
+                <div class="ai-planner-feature">
+                    <div class="ai-planner-feature-icon">✓</div>
+                    <div class="ai-planner-feature-text">Budget optimization suggestions</div>
+                </div>
+                <div class="ai-planner-feature">
+                    <div class="ai-planner-feature-icon">✓</div>
+                    <div class="ai-planner-feature-text">Vendor matching based on your needs</div>
+                </div>
+                <div class="ai-planner-feature">
+                    <div class="ai-planner-feature-icon">✓</div>
+                    <div class="ai-planner-feature-text">Timeline and checklist creation</div>
+                </div>
+            </div>
+
+            <div class="suggestions">
+                <button class="suggestion" data-message="I need help planning a wedding">Plan a wedding</button>
+                <button class="suggestion" data-message="I want to organize a corporate event">Corporate event</button>
+                <button class="suggestion" data-message="Help me plan a birthday party">Birthday party</button>
+                <button class="suggestion" data-message="I need venue recommendations">Find venues</button>
+            </div>
+        </div>
+
+        <div class="ai-planner-chat">
+            <div class="chat-header">
+                <h3>LUMERA AI Assistant</h3>
+            </div>
+            <div class="chat-messages">
+                <div class="message bot">
+                    Hello! I'm your AI Event Planning Assistant. How can I help you plan your perfect event today?
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea class="chat-input" placeholder="Type your message here..." rows="1"></textarea>
+                <button class="send-btn">Send</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="ai-planner-steps">
+        <div class="ai-planner-steps-container">
+            <h2 class="ai-planner-steps-title">How AI Planning Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Tell Us About Your Event</h3>
+                    <p class="step-description">Share details about your event type, budget, guest count, and preferences.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Get AI Recommendations</h3>
+                    <p class="step-description">Receive personalized suggestions for venues, vendors, and event details.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Refine Your Plan</h3>
+                    <p class="step-description">Adjust recommendations based on your feedback and specific requirements.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Connect with Vendors</h3>
+                    <p class="step-description">Get connected with trusted organizers and suppliers that match your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.querySelector('.chat-messages');
+            const chatInput = document.querySelector('.chat-input');
+            const sendBtn = document.querySelector('.send-btn');
+            const suggestions = document.querySelectorAll('.suggestion');
+
+            // Function to add a message to the chat
+            function addMessage(text, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user' : 'bot');
+
+                const time = new Date();
+                const timeString = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                messageDiv.innerHTML = `
+                    ${text}
+                    <div class="message-time">${timeString}</div>
+                `;
+
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Auto-resize textarea
+                chatInput.style.height = 'auto';
+                chatInput.style.height = chatInput.scrollHeight + 'px';
+            }
+
+            // Function to simulate AI response
+            function getAIResponse(userMessage) {
+                // Simple response logic - in a real app, this would connect to an AI service
+                const responses = [
+                    "I'd be happy to help with that! Could you tell me more about your event?",
+                    "Great! Let me find some options for you. What's your budget range?",
+                    "I have several recommendations based on your request. How many guests are you expecting?",
+                    "That sounds exciting! When is your event scheduled?",
+                    "I can help with that. Do you have any specific preferences or requirements?"
+                ];
+
+                // Check for specific keywords
+                if (userMessage.toLowerCase().includes('wedding')) {
+                    return "Weddings are special! I'd love to help you plan your perfect day. What's your wedding date and approximate guest count?";
+                } else if (userMessage.toLowerCase().includes('corporate') || userMessage.toLowerCase().includes('business')) {
+                    return "Corporate events require careful planning. Are you looking for a conference, team building, or product launch?";
+                } else if (userMessage.toLowerCase().includes('birthday')) {
+                    return "Birthday parties are always fun! Is this for an adult or child's birthday? What theme do you have in mind?";
+                } else if (userMessage.toLowerCase().includes('venue')) {
+                    return "I can help you find the perfect venue! What type of venue are you looking for and what's your location preference?";
+                } else {
+                    return responses[Math.floor(Math.random() * responses.length)];
+                }
+            }
+
+            // Send message when button is clicked
+            sendBtn.addEventListener('click', function() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    chatInput.value = '';
+
+                    // Simulate AI thinking
+                    setTimeout(function() {
+                        const response = getAIResponse(message);
+                        addMessage(response, false);
+                    }, 1000);
+                }
+            });
+
+            // Send message when Enter is pressed (but allow Shift+Enter for new line)
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendBtn.click();
+                }
+            });
+
+            // Auto-resize textarea as user types
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+
+            // Handle suggestion clicks
+            suggestions.forEach(suggestion => {
+                suggestion.addEventListener('click', function() {
+                    const message = this.getAttribute('data-message');
+                    chatInput.value = message;
+                    sendBtn.click();
+                });
+            });
+
+            // Initial focus on chat input
+            chatInput.focus();
+        });
+    </script>
+</body>
+</html>

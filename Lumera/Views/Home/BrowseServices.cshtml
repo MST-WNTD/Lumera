@@ -1,0 +1,616 @@
+@model Lumera.Controllers.ServiceListViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Services - LUMERA</title>
+    <link rel="stylesheet" href="~/css/Home.css" />
+    <link rel="stylesheet" href="~/css/landpage.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Services Page Specific Styles */
+        .services-hero {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            margin-top: 5vh;
+            border-radius: 0 0 120px 120px;
+            overflow: hidden;
+        }
+
+        .services-hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #315375 0%, #1e3a5f 100%);
+            border-radius: 0 0 120px 120px;
+        }
+
+        .services-hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .services-hero-title {
+            color: #eef2f5;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            max-width: 800px;
+        }
+
+        .services-hero-subtitle {
+            color: #eef2f5;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 1.55;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .categories-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .categories-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #315375;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .category-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+        }
+
+        .catering-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047dc');
+        }
+
+        .photography-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e2');
+        }
+
+        .venue-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .decoration-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .entertainment-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .florist-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .transportation-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .audiovisual-icon {
+            background-image: url('https://design.penpot.app/assets/by-file-media-id/458ded29-7ef8-80f7-8006-f719306047e7');
+        }
+
+        .category-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #315375;
+        }
+
+        .category-card p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .services-section {
+            padding: 60px 0;
+        }
+
+        .services-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .services-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #315375;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .service-image {
+            height: 200px;
+            background: #eef2f5;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .service-info {
+            padding: 20px;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #315375;
+        }
+
+        .service-category {
+            display: inline-block;
+            background: #eef2f5;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #315375;
+        }
+
+        .service-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .service-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .service-reviews {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .service-description {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .service-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #315375;
+            margin-bottom: 15px;
+        }
+
+        .service-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .view-details-btn {
+            background: #315375;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background: #1e3a5f;
+        }
+
+        .contact-btn {
+            background: transparent;
+            color: #315375;
+            border: 1px solid #315375;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #315375;
+            color: white;
+        }
+
+        .load-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .load-more-btn {
+            background: #315375;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: #1e3a5f;
+                .services-filters
+
+        {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+            .search-box input {
+                width: 100%;
+                padding: 12px 20px;
+                border: 1px solid #ddd;
+                border-radius: 25px;
+                font-size: 16px;
+            }
+
+        .category-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .category-filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #315375;
+            border-radius: 20px;
+            background: white;
+            color: #315375;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .category-filter-btn.active,
+            .category-filter-btn:hover {
+                background: #315375;
+                color: white;
+            }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            border: 1px solid #315375;
+            background: white;
+            color: #315375;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .pagination-btn:hover:not(:disabled) {
+                background: #315375;
+                color: white;
+            }
+
+            .pagination-btn:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+        .pagination-info {
+            margin: 0 15px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="services-hero">
+        <div class="services-hero-background"></div>
+        <div class="services-hero-content">
+            <h1 class="services-hero-title">Browse Event Services</h1>
+            <p class="services-hero-subtitle">Find trusted suppliers for catering, photography, venues, and more</p>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="categories-container">
+            <h2 class="categories-title">Service Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card" data-category="all">
+                    <div class="category-icon catering-icon"></div>
+                    <h3>All Services</h3>
+                    <p>Browse all available services</p>
+                </div>
+                @foreach (var category in Model.Categories)
+                {
+                    <div class="category-card" data-category="@category.ToLower()">
+                        <div class="category-icon @(category.ToLower())-icon"></div>
+                        <h3>@category</h3>
+                        <p>@GetCategoryDescription(category)</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="services-container">
+            <h2 class="services-title">Popular Services</h2>
+
+            <!-- Filters -->
+            <div class="services-filters">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search services..." value="@Model.SearchQuery">
+                </div>
+                <div class="category-filters">
+                    <button class="category-filter-btn @(string.IsNullOrEmpty(Model.SelectedCategory) ? "active" : "")" data-category="all">All</button>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <button class="category-filter-btn @(Model.SelectedCategory == category ? "active" : "")" data-category="@category">@category</button>
+                    }
+                </div>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="services-grid">
+                @if (Model.Services.Any())
+                {
+                    @foreach (var service in Model.Services)
+                    {
+                        <div class="service-card">
+                            <div class="service-image" style="background-image: url('@service.ImageURL')"></div>
+                            <div class="service-info">
+                                <h3 class="service-name">@service.ServiceName</h3>
+                                <div class="service-category">@service.Category</div>
+                                <div class="service-location">
+                                    <span>📍</span> @(service.Location ?? "Metro Manila")
+                                </div>
+                                <div class="service-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <span class="star @(i <= service.AverageRating ? "filled" : "")">★</span>
+                                    }
+                                    <span>@service.AverageRating.ToString("0.0")</span>
+                                </div>
+                                <div class="service-reviews">(@service.TotalReviews reviews)</div>
+                                <p class="service-description">@(service.ServiceDescription?.Length > 100 ? service.ServiceDescription.Substring(0, 100) + "..." : service.ServiceDescription)</p>
+                                <div class="service-price">Starting at ₱@service.BasePrice?.ToString("N0")</div>
+                                <div class="service-actions">
+                                    <button class="view-details-btn" onclick="viewServiceDetails(@service.ServiceID)">View Details</button>
+                                    <button class="contact-btn" onclick="contactService(@service.ServiceID)">Contact</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-services">
+                        <h3>No services found</h3>
+                        <p>Try adjusting your search or filter criteria.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="pagination">
+                    <button class="pagination-btn" onclick="changePage(@(Model.CurrentPage - 1))" @(Model.CurrentPage <= 1 ? "disabled" : "")>Previous</button>
+                    <span class="pagination-info">Page @Model.CurrentPage of @Model.TotalPages</span>
+                    <button class="pagination-btn" onclick="changePage(@(Model.CurrentPage + 1))" @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")>Next</button>
+                </div>
+            }
+
+            <div class="load-more">
+                <button class="load-more-btn" onclick="loadMoreServices()">Load More Services</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Category selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryCards = document.querySelectorAll('.category-card');
+            const categoryFilterBtns = document.querySelectorAll('.category-filter-btn');
+
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    filterServices(category);
+                });
+            });
+
+            categoryFilterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    filterServices(category);
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    filterServices('@Model.SelectedCategory', this.value);
+                }, 500);
+            });
+        });
+
+        function filterServices(category = 'all', search = '') {
+            const url = new URL(window.location.href);
+
+            if (category !== 'all') {
+                url.searchParams.set('category', category);
+            } else {
+                url.searchParams.delete('category');
+            }
+
+            if (search) {
+                url.searchParams.set('search', search);
+            } else {
+                url.searchParams.delete('search');
+            }
+
+            url.searchParams.delete('page'); // Reset to page 1 when filtering
+
+            window.location.href = url.toString();
+        }
+
+        function changePage(page) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page);
+            window.location.href = url.toString();
+        }
+
+        function viewServiceDetails(serviceId) {
+            window.location.href = '@Url.Action("ServiceDetails", "Services")' + '?id=' + serviceId;
+        }
+
+        function contactService(serviceId) {
+            // Simple contact implementation - in a real app, this would open a modal or chat
+            const message = prompt('Enter your message for this service provider:');
+            if (message) {
+                fetch('@Url.Action("ContactService", "Services")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({
+                        serviceId: serviceId,
+                        message: message
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Message sent successfully!');
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending your message.');
+                });
+            }
+        }
+
+        function loadMoreServices() {
+            const currentPage = @Model.CurrentPage;
+            changePage(currentPage + 1);
+        }
+    </script>
+</body>
+</html>
+@functions {
+    private string GetCategoryDescription(string category)
+    {
+        var descriptions = new Dictionary<string, string>
+        {
+            { "Catering", "Food and beverage services" },
+            { "Photography", "Professional event photography" },
+            { "Videography", "Event video recording" },
+            { "Venue", "Event spaces and locations" },
+            { "Decoration", "Event styling and decor" },
+            { "Entertainment", "Performers and activities" },
+            { "Florist", "Flower arrangements" },
+            { "Transportation", "Guest transport services" },
+            { "Audio Visual", "Sound and lighting systems" }
+        };
+
+        return descriptions.ContainsKey(category) ? descriptions[category] : "Professional event services";
+    }
+}

@@ -1,0 +1,55 @@
+﻿/* Fixed Sidebar Layout Styles */
+
+/* Fix sidebar in place */
+aside {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Adjust main content to account for fixed sidebar */
+.main-wrapper {
+    margin-left: 16rem; /* 64 * 0.25rem = 16rem (w-64) */
+}
+
+/* Fix header in place */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Make main content scrollable */
+main {
+    height: calc(100vh - 4rem); /* 4rem = h-16 header height */
+    overflow-y: auto;
+}
+
+    /* Custom scrollbar for main content */
+    main::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    main::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    main::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+        main::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+/* Dark mode scrollbar */
+.dark main::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+    .dark main::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+    }

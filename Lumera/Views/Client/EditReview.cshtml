@@ -1,0 +1,163 @@
+﻿@using Lumera.Models.ViewModels
+@model EditReviewViewModel
+@{
+    ViewData["Title"] = "Edit Review - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Client Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">Client</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">User</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/browse">
+                    <span class="material-symbols-outlined">search</span> Browse & Book
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/client/reviews">
+                    <span class="material-symbols-outlined">reviews</span> My Reviews
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/client/profile">
+                    <span class="material-symbols-outlined">settings</span> Profile Settings
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/home/index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-20">
+                <div class="flex items-center gap-4">
+                    <a href="/client/reviews" class="p-2 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg">
+                        <span class="material-symbols-outlined text-stone-600 dark:text-stone-300">arrow_back</span>
+                    </a>
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Edit Review</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    @await Html.PartialAsync("_NotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-lg p-8">
+                        <h1 class="text-3xl font-bold text-stone-900 dark:text-white mb-2">Edit Your Review</h1>
+                        <p class="text-stone-500 dark:text-stone-400 mb-6">Update your review for @Model.ServiceName</p>
+
+                        <form asp-action="EditReview" method="post">
+                            <input type="hidden" asp-for="ReviewID" />
+                            <input type="hidden" asp-for="BookingID" />
+                            <input type="hidden" asp-for="ServiceName" />
+
+                            <div class="mb-6">
+                                <label class="block text-sm font-semibold text-stone-900 dark:text-white mb-2">Rating</label>
+                                <div class="flex gap-2">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var isChecked = Model.Rating == i;
+                                        <label class="cursor-pointer">
+                                            <input type="radio" asp-for="Rating" value="@i" class="hidden peer" checked="@isChecked" />
+                                            <span class="material-symbols-outlined text-3xl text-stone-300 peer-checked:text-yellow-400 hover:text-yellow-300 transition">star</span>
+                                        </label>
+                                    }
+                                </div>
+                                <span asp-validation-for="Rating" class="text-red-500 text-sm"></span>
+                            </div>
+
+                            <div class="mb-6">
+                                <label asp-for="Comment" class="block text-sm font-semibold text-stone-900 dark:text-white mb-2">Your Review</label>
+                                <textarea asp-for="Comment" rows="6" class="w-full rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-800 px-4 py-3 text-stone-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary" placeholder="Tell us about your experience...">@Model.Comment</textarea>
+                                <span asp-validation-for="Comment" class="text-red-500 text-sm"></span>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <button type="submit" class="flex-1 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition">
+                                    Update Review
+                                </button>
+                                <a href="/client/reviews" class="flex-1 bg-stone-200 dark:bg-stone-700 text-stone-900 dark:text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-stone-300 dark:hover:bg-stone-600 transition">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script src="~/js/notifications.js"></script>
+</body>
+</html>

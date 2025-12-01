@@ -1,0 +1,473 @@
+﻿@model Lumera.Models.AdminViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900" onload="this.rel='stylesheet'" rel="stylesheet" />
+    <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">admin_panel_settings</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Admin Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">Administrator</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Admin</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                @{
+                    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+                    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+                }
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg @(currentAction == "Index" && currentController == "Admin" ? "bg-primary/10 dark:bg-primary/20 text-primary font-bold" : "hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300")"
+                   href="@Url.Action("Index", "Admin")">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg @(currentAction == "UserManagement" ? "bg-primary/10 dark:bg-primary/20 text-primary font-bold" : "hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300")"
+                   href="@Url.Action("UserManagement", "Admin")">
+                    <span class="material-symbols-outlined">group</span> User Management
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg @(currentAction == "ContentModeration" ? "bg-primary/10 dark:bg-primary/20 text-primary font-bold" : "hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300")"
+                   href="@Url.Action("ContentModeration", "Admin")">
+                    <span class="material-symbols-outlined">content_paste</span> Content Moderation
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <form method="post" asp-controller="Account" asp-action="Logout" class="w-full">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300 w-full text-left">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-20">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Admin Dashboard</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Welcome back, Administrator!</p>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="mb-8"></div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">group</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.TotalUsers</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Total Users</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400">pending_actions</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.PendingApprovals</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Pending Approvals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">event</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">@Model.ActiveEvents</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Active Events</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">payments</span>
+                            </div>
+                            <div>
+                                <p class="text-2xl font-bold text-stone-900 dark:text-white">$@Model.TotalRevenue</p>
+                                <p class="text-sm text-stone-500 dark:text-stone-400">Total Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Pending Approvals Section -->
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900 dark:text-white">Pending Organizer/Supplier Approvals</h3>
+                        </div>
+
+                        @if (Model.Users.Any(u => !u.IsApproved && (u.Role == "Organizer" || u.Role == "Supplier")))
+                        {
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="text-sm text-stone-500 dark:text-stone-400">
+                                        <tr>
+                                            <th class="p-2 font-medium">Name</th>
+                                            <th class="p-2 font-medium">Email</th>
+                                            <th class="p-2 font-medium">Role</th>
+                                            <th class="p-2 font-medium">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-stone-200 dark:divide-stone-800">
+                                        @foreach (var user in Model.Users.Where(u => !u.IsApproved && (u.Role == "Organizer" || u.Role == "Supplier")))
+                                        {
+                                            <tr class="text-sm">
+                                                <td class="p-2 font-medium">@user.FirstName @user.LastName</td>
+                                                <td class="p-2">@user.Email</td>
+                                                <td class="p-2">
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary dark:bg-primary/20">@user.Role</span>
+                                                </td>
+                                                <td class="p-2 flex items-center gap-2">
+                                                    <button class="approve-user text-green-600 hover:underline" data-userid="@user.UserID">Approve</button>
+                                                    <span class="text-stone-300 dark:text-stone-600">|</span>
+                                                    <button class="suspend-user text-red-600 hover:underline" data-userid="@user.UserID">Reject</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-8">
+                                <span class="material-symbols-outlined text-stone-300 dark:text-stone-600 text-6xl mb-4">check_circle</span>
+                                <p class="text-stone-500 dark:text-stone-400">No pending Organizer/Supplier approvals.</p>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- User Management Section -->
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6" id="user-management">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold text-stone-900 dark:text-white">User Management</h3>
+                            <div class="flex items-center gap-4">
+                                <div class="relative">
+                                    <select class="pl-4 pr-10 py-2 border border-stone-300 dark:border-stone-700 rounded-lg bg-white dark:bg-stone-800 text-stone-900 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-primary appearance-none" id="roleFilter">
+                                        <option value="">All Roles</option>
+                                        <option value="Client">Client</option>
+                                        <option value="Organizer">Organizer</option>
+                                        <option value="Supplier">Supplier</option>
+                                    </select>
+                                    <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-stone-400">arrow_drop_down</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-b border-stone-200 dark:border-stone-700 mb-4">
+                            <nav aria-label="Tabs" class="-mb-px flex space-x-8">
+                                <a class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm status-tab" data-status="all" href="#">All Users</a>
+                                <a class="border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm status-tab" data-status="pending" href="#">Pending Approval</a>
+                                <a class="border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm status-tab" data-status="suspended" href="#">Suspended</a>
+                            </nav>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="text-sm text-stone-500 dark:text-stone-400">
+                                    <tr>
+                                        <th class="p-2 font-medium">User</th>
+                                        <th class="p-2 font-medium">Email</th>
+                                        <th class="p-2 font-medium">Role</th>
+                                        <th class="p-2 font-medium">Status</th>
+                                        <th class="p-2 font-medium">Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body" class="divide-y divide-stone-200 dark:divide-stone-800">
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <tr class="text-sm user-row"
+                                            data-status="@(user.IsActive ? (user.IsApproved ? "active" : "pending") : "suspended")">
+                                            <td class="p-2 font-medium text-stone-900 dark:text-white whitespace-nowrap">
+                                                <div class="flex items-center gap-3">
+                                                    @if (!string.IsNullOrEmpty(user.AvatarURL))
+                                                    {
+                                                        <img class="w-8 h-8 rounded-full" src="@user.AvatarURL" alt="@user.FirstName" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                                                            <span class="material-symbols-outlined text-primary text-sm">person</span>
+                                                        </div>
+                                                    }
+                                                    <div>@user.FirstName @user.LastName</div>
+                                                </div>
+                                            </td>
+                                            <td class="p-2">@user.Email</td>
+                                            <td class="p-2">
+                                                <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary dark:bg-primary/20">@user.Role</span>
+                                            </td>
+                                            <td class="p-2">
+                                                @if (!user.IsActive)
+                                                {
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">Inactive</span>
+                                                }
+                                                else if (!user.IsApproved)
+                                                {
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pending Approval</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">Active</span>
+                                                }
+                                            </td>
+                                            <td class="p-2">@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Content Moderation Section -->
+                    <div class="bg-white dark:bg-stone-900 rounded-xl shadow-sm p-6" id="content-moderation">
+                        <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-4">Content Moderation</h3>
+                        <div class="border-b border-stone-200 dark:border-stone-700 mb-4">
+                            <nav aria-label="Tabs" class="-mb-px flex space-x-8">
+                                <a class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Pending Services</a>
+                                <a class="border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 hover:border-stone-300 dark:hover:border-stone-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Pending Reviews</a>
+                            </nav>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="text-sm text-stone-500 dark:text-stone-400">
+                                    <tr>
+                                        <th class="p-2 font-medium">Content</th>
+                                        <th class="p-2 font-medium">Provider/User</th>
+                                        <th class="p-2 font-medium">Category</th>
+                                        <th class="p-2 font-medium">Status</th>
+                                        <th class="p-2 font-medium">Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="content-table-body" class="divide-y divide-stone-200 dark:divide-stone-800">
+                                    @foreach (var item in Model.PendingContent)
+                                    {
+                                        <tr class="text-sm">
+                                            <td class="p-2 font-medium text-stone-900 dark:text-white whitespace-nowrap">
+                                                @if (item.Type == "Service")
+                                                {
+                                                    @item.Name
+                                                }
+                                                else
+                                                {
+                                                    <div>
+                                                        <div class="font-medium">Review</div>
+                                                        <div class="text-sm text-stone-500 truncate max-w-xs">@item.Details</div>
+                                                    </div>
+                                                }
+                                            </td>
+                                            <td class="p-2">@item.ProviderName</td>
+                                            <td class="p-2">
+                                                <span class="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary dark:bg-primary/20">@item.Category</span>
+                                            </td>
+                                            <td class="p-2">
+                                                @if (item.Status == "Pending")
+                                                {
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">Pending</span>
+                                                }
+                                                else if (item.Status == "Flagged")
+                                                {
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">Flagged</span>
+                                                }
+                                            </td>
+                                            <td class="p-2">@item.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Status tab functionality
+            document.querySelectorAll('.status-tab').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Update active tab styling
+                    document.querySelectorAll('.status-tab').forEach(t => {
+                        t.classList.remove('border-primary', 'text-primary');
+                        t.classList.add('border-transparent', 'text-stone-500', 'dark:text-stone-400');
+                    });
+
+                    this.classList.remove('border-transparent', 'text-stone-500', 'dark:text-stone-400');
+                    this.classList.add('border-primary', 'text-primary');
+
+                    // Filter users by status
+                    const status = this.getAttribute('data-status');
+                    filterUsersByStatus(status);
+                });
+            });
+
+            // Search functionality
+            document.getElementById('userSearch').addEventListener('input', debounce(filterUsers, 300));
+            document.getElementById('roleFilter').addEventListener('change', filterUsers);
+
+            // Approve and Reject Buttons
+            document.querySelectorAll('.approve-user').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-userid');
+                    updateUserStatus(userId, 'approve');
+                });
+            });
+
+            document.querySelectorAll('.suspend-user').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const userId = this.getAttribute('data-userid');
+                    updateUserStatus(userId, 'suspend');
+                });
+            });
+        });
+
+        function filterUsersByStatus(status) {
+            const rows = document.querySelectorAll('#users-table-body .user-row');
+
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+
+                if (status === 'all' || rowStatus === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const roleFilter = document.getElementById('roleFilter').value;
+            const activeTab = document.querySelector('.status-tab.border-primary');
+            const activeStatus = activeTab ? activeTab.getAttribute('data-status') : 'all';
+
+            const rows = document.querySelectorAll('#users-table-body .user-row');
+
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const email = row.cells[1].textContent.toLowerCase();
+                const role = row.cells[2].textContent.toLowerCase();
+                const rowStatus = row.getAttribute('data-status');
+
+                const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                const matchesRole = !roleFilter || role.includes(roleFilter.toLowerCase());
+                const matchesStatus = activeStatus === 'all' || rowStatus === activeStatus;
+
+                row.style.display = (matchesSearch && matchesRole && matchesStatus) ? '' : 'none';
+            });
+        }
+
+        async function updateUserStatus(userId, action) {
+            try {
+                const response = await fetch('@Url.Action("UpdateUserStatus", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({ userId: userId, action: action })
+                });
+
+                if (response.ok) {
+                    location.reload(); // refresh page to see updated status
+                } else {
+                    const error = await response.text();
+                    alert('Error: ' + error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Something went wrong');
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

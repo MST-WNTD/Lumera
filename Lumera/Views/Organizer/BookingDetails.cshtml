@@ -1,0 +1,418 @@
+﻿@model Lumera.Models.Booking
+@{
+    ViewData["Title"] = "Booking Details - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen z-30">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Organizer Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(ViewBag.OrganizerName ?? "Organizer")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Organizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/organizer/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/services">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/earnings">
+                    <span class="material-symbols-outlined">payments</span> Earnings & Payouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/profile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/home/index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-20">
+                <div class="flex items-center gap-4">
+                    <a href="/organizer/bookings" class="p-2 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-lg">
+                        <span class="material-symbols-outlined text-stone-600 dark:text-stone-300">arrow_back</span>
+                    </a>
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Booking Details</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="startConversation(@Model.BookingID)" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium transition-colors">
+                        <span class="material-symbols-outlined text-sm">mail</span>
+                        <span>Message Client</span>
+                    </button>
+                    @await Html.PartialAsync("_OrganizerNotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="max-w-6xl mx-auto space-y-6">
+                    <!-- Booking Header Card -->
+                    <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-8">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Booking #@Model.BookingID</h1>
+                                <div class="flex items-center gap-2">
+                                    @{
+                                        var statusClass = Model.Status.ToLower() switch
+                                        {
+                                            "confirmed" => "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+                                            "pending" => "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+                                            "completed" => "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+                                            "cancelled" => "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+                                            _ => "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+                                        };
+                                    }
+                                    <span class="px-3 py-1 rounded-full text-sm font-medium @statusClass">@Model.Status</span>
+                                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                                        @Model.ProviderType Provider
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Booked on</p>
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">@Model.BookingDate.ToString("MMM dd, yyyy")</p>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        @if (Model.Status.ToLower() == "pending")
+                        {
+                            <div class="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <button onclick="updateBookingStatus(@Model.BookingID, 'confirmed')" class="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold transition-colors">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                                    Accept Booking
+                                </button>
+                                <button onclick="updateBookingStatus(@Model.BookingID, 'cancelled')" class="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition-colors">
+                                    <span class="material-symbols-outlined text-sm">cancel</span>
+                                    Decline Booking
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Information Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Client Information -->
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">person</span>
+                                Client Information
+                            </h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Name</p>
+                                    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        @Model.Client?.User?.FirstName @Model.Client?.User?.LastName
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Email</p>
+                                    <p class="text-gray-900 dark:text-white">@Model.Client?.User?.Email</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Phone</p>
+                                    <p class="text-gray-900 dark:text-white">@(Model.Client?.User?.Phone ?? "Not provided")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Information -->
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">design_services</span>
+                                Service Details
+                            </h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Service Name</p>
+                                    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        @(Model.Service?.ServiceName ?? "N/A")
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Category</p>
+                                    <p class="text-gray-900 dark:text-white">@(Model.Service?.Category ?? "N/A")</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Provider Type</p>
+                                    <p class="text-gray-900 dark:text-white">@Model.ProviderType</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Information -->
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">event</span>
+                                Event Details
+                            </h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Event Date</p>
+                                    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        @Model.EventDate.ToString("MMMM dd, yyyy")
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Event Name</p>
+                                    <p class="text-gray-900 dark:text-white">@(Model.Event?.EventName ?? "N/A")</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Event Type</p>
+                                    <p class="text-gray-900 dark:text-white">@(Model.Event?.EventType ?? "N/A")</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Location</p>
+                                    <p class="text-gray-900 dark:text-white">@(Model.Event?.Location ?? "Not specified")</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Information -->
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">payments</span>
+                                Pricing Details
+                            </h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Quote Amount</p>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                        @($"{Model.QuoteAmount:C}")
+                                    </p>
+                                </div>
+                                @if (Model.FinalAmount.HasValue && Model.FinalAmount != Model.QuoteAmount)
+                                {
+                                    <div>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Final Amount</p>
+                                        <p class="text-2xl font-bold text-primary">
+                                            @($"{Model.FinalAmount:C}")
+                                        </p>
+                                    </div>
+                                }
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Payment Status</p>
+                                    <p class="text-gray-900 dark:text-white">
+                                        @(Model.Status == "Confirmed" ? "Awaiting Payment" : Model.Status == "Completed" ? "Paid" : "Not Paid")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    @if (!string.IsNullOrEmpty(Model.ProviderNotes) || !string.IsNullOrEmpty(Model.ClientNotes))
+                    {
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">notes</span>
+                                Additional Notes
+                            </h2>
+                            @if (!string.IsNullOrEmpty(Model.ClientNotes))
+                            {
+                                <div class="mb-4">
+                                    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">Client Notes</p>
+                                    <p class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">@Model.ClientNotes</p>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.ProviderNotes))
+                            {
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-2">Your Notes</p>
+                                    <p class="text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">@Model.ProviderNotes</p>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Service Description -->
+                    @if (!string.IsNullOrEmpty(Model.Service?.ServiceDescription))
+                    {
+                        <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">description</span>
+                                Service Description
+                            </h2>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">@Model.Service.ServiceDescription</p>
+                        </div>
+                    }
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white dark:bg-background-dark rounded-lg shadow-md p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <a href="/organizer/messages?booking=@Model.BookingID" class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors group">
+                                <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 group-hover:text-primary">mail</span>
+                                <div>
+                                    <p class="font-medium text-gray-900 dark:text-white">Message Client</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Send a message</p>
+                                </div>
+                            </a>
+                            <a href="/organizer/bookings" class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors group">
+                                <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 group-hover:text-primary">book_online</span>
+                                <div>
+                                    <p class="font-medium text-gray-900 dark:text-white">All Bookings</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">View all requests</p>
+                                </div>
+                            </a>
+                            <a href="/organizer/services" class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors group">
+                                <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 group-hover:text-primary">design_services</span>
+                                <div>
+                                    <p class="font-medium text-gray-900 dark:text-white">My Services</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Manage services</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/organizer-notifications.js"></script>
+    <script>
+        function updateBookingStatus(bookingId, status) {
+            const action = status === 'confirmed' ? 'accept' : 'decline';
+
+            if (confirm(`Are you sure you want to ${action} this booking?`)) {
+                fetch(`/organizer/bookings/update-status/${bookingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: status })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert(`Booking ${action}ed successfully!`);
+                        window.location.href = '/organizer/bookings';
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to update booking status');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message || 'Failed to update booking status');
+                });
+            }
+        }
+
+        async function startConversation(bookingId) {
+            try {
+                const messageBtn = event.target;
+                const originalText = messageBtn.innerHTML;
+                messageBtn.innerHTML = '<span class="material-symbols-outlined text-sm">hourglass_empty</span> <span>Starting...</span>';
+                messageBtn.disabled = true;
+
+                const response = await fetch('/organizer/messages/start-conversation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookingId: bookingId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = `/organizer/messages?conversation=${data.conversationId}`;
+                } else {
+                    alert('Failed to start conversation: ' + data.message);
+                    messageBtn.innerHTML = originalText;
+                    messageBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error starting conversation:', error);
+                alert('Error starting conversation. Please try again.');
+                if (event.target) {
+                    const messageBtn = event.target;
+                    messageBtn.innerHTML = '<span class="material-symbols-outlined text-sm">mail</span> <span>Message Client</span>';
+                    messageBtn.disabled = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

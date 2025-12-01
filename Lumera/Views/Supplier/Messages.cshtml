@@ -1,0 +1,441 @@
+﻿@model Lumera.Models.SupplierMessagesViewModel
+@{
+    ViewData["Title"] = "Messages - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex min-h-screen">
+        <!-- Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Supplier Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">store</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(Model.Supplier.BusinessName ?? "Business")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Supplier</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/myevents">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/myservices">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/supplier/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                    @if (Model.UnreadMessages > 0)
+                    {
+                        <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-auto">@Model.UnreadMessages</span>
+                    }
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/myprofile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/supplier/earnings">
+                    <span class="material-symbols-outlined">paid</span> Earnings & Payouts
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 mt-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/home/index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Messages</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Communicate with clients</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-stone-400">search</span>
+                        <input class="bg-background-light dark:bg-stone-800 border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary" placeholder="Search messages..." type="text" />
+                    </div>
+                    <button class="p-2 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">store</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Messages</h2>
+                    <div class="flex gap-2">
+                        <button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-md hover:bg-opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary focus:ring-offset-background-light dark:focus:ring-offset-background-dark">
+                            <span class="material-symbols-outlined">filter_list</span>
+                            <span>Filter</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-gray-700/50 mb-6">
+                    <nav aria-label="Tabs" class="flex -mb-px space-x-8">
+                        <a aria-current="page" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-primary border-primary" href="#">All Messages</a>
+                        <a class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">Unread</a>
+                        <a class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">Important</a>
+                    </nav>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Conversations List -->
+                    <div class="lg:col-span-1 bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 class="font-bold text-lg text-gray-900 dark:text-white">Conversations</h3>
+                        </div>
+                        <div class="divide-y divide-gray-200 dark:divide-gray-700 max-h-[600px] overflow-y-auto">
+                            @if (Model.Conversations != null && Model.Conversations.Any())
+                            {
+                                @foreach (var conversation in Model.Conversations)
+                                {
+                                    var client = conversation.Event?.Client;
+                                    var clientName = client?.User != null ? $"{client.User.FirstName} {client.User.LastName}" : "Unknown Client";
+                                    var lastMessage = conversation.Messages?.OrderByDescending(m => m.SentAt).FirstOrDefault();
+                                    var unreadCount = conversation.Messages?.Count(m => !m.IsRead && m.Sender?.Role != "Supplier") ?? 0;
+
+                                    <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer conversation-item"
+                                         data-conversation-id="@conversation.ConversationID"
+                                         data-client-name="@clientName"
+                                         data-event-name="@(conversation.Event?.EventName ?? "")"
+                                         data-event-date="@(conversation.Event?.EventDate.ToString("MMM dd, yyyy") ?? "")">
+                                        <div class="flex gap-3">
+                                            <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-primary">person</span>
+                                            </div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex justify-between items-start mb-1">
+                                                    <p class="font-semibold text-gray-900 dark:text-white truncate">@clientName</p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                        @((lastMessage?.SentAt ?? conversation.LastMessageAt).ToString("MMM dd"))
+                                                    </p>
+                                                </div>
+                                                <p class="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                                    @(lastMessage?.MessageText ?? "No messages")
+                                                </p>
+                                                @if (unreadCount > 0 || conversation.Event != null)
+                                                {
+                                                    <div class="flex justify-between items-center mt-1">
+                                                        <span class="text-xs text-primary font-medium">@(conversation.Event?.EventName ?? "")</span>
+                                                        @if (unreadCount > 0)
+                                                        {
+                                                            <span class="bg-primary text-white text-xs rounded-full px-2 py-1">@unreadCount</span>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="p-8 text-center">
+                                    <p class="text-gray-500 dark:text-gray-400">No conversations yet</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Message Thread -->
+                    <div class="lg:col-span-2 bg-white dark:bg-background-dark rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 id="current-client-name" class="font-bold text-lg text-gray-900 dark:text-white">
+                                        @if (Model.Conversations != null && Model.Conversations.Any())
+                                        {
+                                            var firstClient = Model.Conversations.FirstOrDefault()?.Event?.Client;
+                                            @(firstClient?.User != null ? $"{firstClient.User.FirstName} {firstClient.User.LastName}" : "Select a conversation")
+                                        }
+                                        else
+                                        {
+                                            <text>Select a conversation</text>
+                                        }
+                                    </h3>
+                                    <p id="current-event-info" class="text-sm text-gray-500 dark:text-gray-400">
+                                        @if (Model.Conversations != null && Model.Conversations.Any())
+                                        {
+                                            var firstConv = Model.Conversations.FirstOrDefault();
+                                            if (firstConv?.Event != null)
+                                            {
+                                                @($"{firstConv.Event.EventName} - {firstConv.Event.EventDate:MMM dd, yyyy}")
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                        <span class="material-symbols-outlined">phone</span>
+                                    </button>
+                                    <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                        <span class="material-symbols-outlined">videocam</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Messages -->
+                        <div class="p-4 space-y-4 max-h-[500px] overflow-y-auto" id="message-container">
+                            @if (Model.Messages != null && Model.Messages.Any())
+                            {
+                                @foreach (var message in Model.Messages)
+                                {
+                                    var isSupplier = message.Sender?.Role == "Supplier";
+
+                                    <div class="flex @(isSupplier ? "justify-end" : "justify-start")">
+                                        <div class="max-w-[70%]">
+                                            <div class="@(isSupplier ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white") rounded-lg p-3">
+                                                <p>@message.MessageText</p>
+                                            </div>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">@message.SentAt.ToString("MMM dd, h:mm tt")</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center text-gray-500 dark:text-gray-400 py-12">
+                                    <p>-</p>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Message Input -->
+                        <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="flex gap-2">
+                                <input id="message-input" class="flex-1 bg-background-light dark:bg-gray-800 border-none rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary" placeholder="Type your message..." type="text" />
+                                <button id="send-message-btn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90">
+                                    <span class="material-symbols-outlined">send</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let currentConversationId = @(ViewBag.SelectedConversationId ?? 0);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight the selected conversation
+            if (currentConversationId > 0) {
+                const selectedConv = document.querySelector(`[data-conversation-id="${currentConversationId}"]`);
+                if (selectedConv) {
+                    selectedConv.classList.add('bg-gray-50', 'dark:bg-gray-800/50');
+                }
+            }
+
+            // Search functionality
+            const searchInput = document.querySelector('input[placeholder="Search messages..."]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const conversations = document.querySelectorAll('.conversation-item');
+
+                    conversations.forEach(conv => {
+                        const text = conv.textContent.toLowerCase();
+                        conv.style.display = text.includes(searchTerm) ? 'block' : 'none';
+                    });
+                });
+            }
+
+            // Conversation selection
+            const conversationItems = document.querySelectorAll('.conversation-item');
+            conversationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    conversationItems.forEach(i => i.classList.remove('bg-gray-50', 'dark:bg-gray-800/50'));
+                    this.classList.add('bg-gray-50', 'dark:bg-gray-800/50');
+
+                    currentConversationId = parseInt(this.dataset.conversationId);
+                    const clientName = this.dataset.clientName;
+                    const eventName = this.dataset.eventName;
+                    const eventDate = this.dataset.eventDate;
+
+                    document.getElementById('current-client-name').textContent = clientName;
+                    document.getElementById('current-event-info').textContent = eventName && eventDate ? `${eventName} - ${eventDate}` : '';
+
+                    loadMessages(currentConversationId);
+                });
+            });
+
+            // Message sending
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-message-btn');
+
+            if (messageInput && sendButton) {
+                sendButton.addEventListener('click', sendMessage);
+                messageInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+
+            scrollToBottom();
+        });
+
+        function loadMessages(conversationId) {
+            fetch(`/supplier/messages/conversation/${conversationId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        displayMessages(data.messages);
+                    }
+                })
+                .catch(error => console.error('Error loading messages:', error));
+        }
+
+        function displayMessages(messages) {
+            const container = document.getElementById('message-container');
+            container.innerHTML = '';
+
+            if (!messages || messages.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 dark:text-gray-400 py-12"><p>-</p></div>';
+                return;
+            }
+
+            messages.forEach(message => {
+                const isSupplier = message.senderRole === 'Supplier';
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${isSupplier ? 'justify-end' : 'justify-start'}`;
+
+                messageDiv.innerHTML = `
+                    <div class="max-w-[70%]">
+                        <div class="${isSupplier ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'} rounded-lg p-3">
+                            <p>${escapeHtml(message.messageText)}</p>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${formatDate(message.sentAt)}</p>
+                    </div>
+                `;
+
+                container.appendChild(messageDiv);
+            });
+
+            scrollToBottom();
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
+
+            if (!message || !currentConversationId) {
+                if (!currentConversationId) {
+                    alert('Please select a conversation first');
+                }
+                return;
+            }
+
+            fetch('/supplier/messages/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    conversationId: currentConversationId,
+                    messageText: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageInput.value = '';
+                    loadMessages(currentConversationId);
+                } else {
+                    alert('Failed to send message: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                alert('Error sending message');
+            });
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('message-container');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+            return date.toLocaleString('en-US', options);
+        }
+    </script>
+</body>
+</html>

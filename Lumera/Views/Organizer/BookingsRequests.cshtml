@@ -1,0 +1,422 @@
+﻿@model Lumera.Models.OrganizerBookingsViewModel
+@using Lumera.Services
+@{
+    ViewData["Title"] = "Bookings & Requests - LUMERA";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13a4ec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101c22",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-stone-800 dark:text-stone-200">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Fixed Unified Sidebar -->
+        <aside class="w-64 bg-white dark:bg-background-dark flex flex-col border-r border-stone-200 dark:border-stone-800 fixed left-0 top-0 h-screen">
+            <div class="p-6 flex items-center gap-3">
+                <div class="bg-primary p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-white">event</span>
+                </div>
+                <h1 class="text-xl font-bold text-stone-900 dark:text-white">LUMERA</h1>
+            </div>
+
+            <!-- Organizer Info -->
+            <div class="px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-stone-900 dark:text-white">@(Model.Organizer.BusinessName ?? "Business")</p>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">Organizer</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-2 overflow-y-auto">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/dashboard">
+                    <span class="material-symbols-outlined">dashboard</span> Dashboard
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/events">
+                    <span class="material-symbols-outlined">event</span> My Events
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary font-bold" href="/organizer/bookings">
+                    <span class="material-symbols-outlined">book_online</span> Bookings & Requests
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/services">
+                    <span class="material-symbols-outlined">design_services</span> My Services
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/messages">
+                    <span class="material-symbols-outlined">mail</span> Messages
+                    @if (Model.UnreadMessages > 0)
+                    {
+                        <span class="bg-red-500 text-white text-xs rounded-full px-2 py-1 ml-auto">@Model.UnreadMessages</span>
+                    }
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/earnings">
+                    <span class="material-symbols-outlined">payments</span> Earnings & Payouts
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" href="/organizer/profile">
+                    <span class="material-symbols-outlined">settings</span> My Profile
+                </a>
+            </nav>
+
+            <!-- Logout Option -->
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 text-stone-600 dark:text-stone-300" asp-controller="Home" asp-action="Index">
+                    <span class="material-symbols-outlined">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area with margin for fixed sidebar -->
+        <div class="flex-1 flex flex-col ml-64">
+            <!-- Fixed Header -->
+            <header class="flex h-16 items-center justify-between border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-background-dark px-6 fixed top-0 right-0 left-64 z-10">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-2xl font-bold text-stone-900 dark:text-white">Bookings & Requests</h2>
+                    <p class="text-stone-500 dark:text-stone-400">Manage client booking requests</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-500 dark:text-stone-400">search</span>
+                        <input id="searchInput" class="bg-background-light dark:bg-stone-800 border-none rounded-lg pl-10 pr-4 py-2 focus:ring-2 focus:ring-primary" placeholder="Search bookings..." type="text" />
+                    </div>
+                    @await Html.PartialAsync("_OrganizerNotificationDropdown")
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-primary">business</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Main Content with top margin for fixed header -->
+            <main class="flex-1 p-8 bg-background-light dark:bg-background-dark overflow-y-auto mt-16">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-0">
+                </div>
+
+                <!-- Tabs -->
+                <div class="border-b border-gray-200 dark:border-gray-700/50 mb-6">
+                    <nav aria-label="Tabs" class="flex -mb-px space-x-8">
+                        <a data-status="all" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-primary border-primary" href="#">
+                            All (<span class="tab-count" data-status="all">@Model.Bookings.Count</span>)
+                        </a>
+                        <a data-status="pending" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">
+                            Pending (<span class="tab-count" data-status="pending">@Model.Bookings.Count(b => b.Status.ToLower() == "pending")</span>)
+                        </a>
+                        <a data-status="confirmed" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">
+                            Confirmed (<span class="tab-count" data-status="confirmed">@Model.Bookings.Count(b => b.Status.ToLower() == "confirmed")</span>)
+                        </a>
+                        <a data-status="completed" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">
+                            Completed (<span class="tab-count" data-status="completed">@Model.Bookings.Count(b => b.Status.ToLower() == "completed")</span>)
+                        </a>
+                        <a data-status="cancelled" class="tab-link whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600" href="#">
+                            Cancelled (<span class="tab-count" data-status="cancelled">@Model.Bookings.Count(b => b.Status.ToLower() == "cancelled")</span>)
+                        </a>
+                    </nav>
+                </div>
+
+                <div class="bg-white dark:bg-background-dark rounded-lg shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700/50">
+                            <thead class="bg-gray-50 dark:bg-gray-800/20">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Client</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Service</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Event Date</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Price</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Status</th>
+                                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider" scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody" class="bg-white dark:bg-background-dark divide-y divide-gray-200 dark:divide-gray-700/50">
+                                @foreach (var booking in Model.Bookings)
+                                {
+                                    <tr class="booking-row hover:bg-gray-50 dark:hover:bg-white/5"
+                                        data-status="@booking.Status.ToLower()"
+                                        data-client="@booking.Client?.User?.FirstName @booking.Client?.User?.LastName"
+                                        data-service="@booking.Service?.ServiceName"
+                                        data-booking-id="@booking.BookingID">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white !text-left">
+                                            @booking.Client?.User?.FirstName @booking.Client?.User?.LastName
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 !text-center">
+                                            @booking.Service?.ServiceName
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 !text-center">
+                                            @booking.EventDate.ToString("MMM dd, yyyy")
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white !text-center">
+                                            @{
+                                                var displayPrice = booking.FinalAmount ?? booking.QuoteAmount ?? booking.Service?.Price ?? 0;
+                                            }
+                                            @(displayPrice.ToString("C", new System.Globalization.CultureInfo("en-PH")))
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm !text-center">
+                                            @{
+                                                var statusClass = booking.Status.ToLower() switch
+                                                {
+                                                    "confirmed" => "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+                                                    "pending" => "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+                                                    "completed" => "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+                                                    "cancelled" => "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+                                                    _ => "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                                                };
+                                            }
+                                            <span class="status-badge inline-block px-3 py-1 text-xs font-medium rounded-full @statusClass">@booking.Status</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                            <div class="flex gap-2 items-center justify-center action-buttons">
+                                                @if (booking.Status.ToLower() == "pending")
+                                                {
+                                                    <button class="text-green-600 hover:text-green-800 dark:hover:text-green-500 font-medium" onclick="updateBookingStatus(@booking.BookingID, 'confirmed')">Accept</button>
+                                                    <span class="text-gray-300 dark:text-gray-600">|</span>
+                                                    <button class="text-red-600 hover:text-red-800 dark:hover:text-red-500 font-medium" onclick="updateBookingStatus(@booking.BookingID, 'cancelled')">Decline</button>
+                                                    <span class="text-gray-300 dark:text-gray-600">|</span>
+                                                }
+                                                <button class="text-primary hover:underline font-medium" onclick="startConversationFromBooking(@booking.BookingID, '@(booking.Client?.User?.FirstName) @(booking.Client?.User?.LastName)', '@(booking.Service?.ServiceName)', event)">
+                                                    Message
+                                                </button>
+                                                <span class="text-gray-300 dark:text-gray-600">|</span>
+                                                <a href="/organizer/bookings/details/@booking.BookingID" class="text-primary hover:underline font-medium">View</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="emptyState" class="text-center py-12 hidden">
+                        <span class="material-symbols-outlined text-gray-300 dark:text-gray-600 text-6xl mb-4">book_online</span>
+                        <p class="text-gray-500 dark:text-gray-400" id="emptyStateMessage">No booking requests found</p>
+                    </div>
+
+                    @if (!Model.Bookings.Any())
+                    {
+                        <div class="text-center py-12">
+                            <span class="material-symbols-outlined text-gray-300 dark:text-gray-600 text-6xl mb-4">book_online</span>
+                            <p class="text-gray-500 dark:text-gray-400">No booking requests yet</p>
+                        </div>
+                    }
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/organizer-notifications.js"></script>
+    <script>
+        // Start conversation from booking
+        async function startConversationFromBooking(bookingId, clientName, serviceName, event) {
+            try {
+                // Prevent default action
+                if (event) {
+                    event.preventDefault();
+                }
+
+                // Show loading state
+                const messageBtn = event ? event.target : null;
+                if (!messageBtn) return;
+
+                const originalText = messageBtn.textContent;
+                messageBtn.textContent = 'Starting...';
+                messageBtn.disabled = true;
+
+                const response = await fetch('/organizer/messages/start-conversation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bookingId: bookingId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Redirect to messages page with the conversation
+                    window.location.href = `/organizer/messages?conversation=${data.conversationId}`;
+                } else {
+                    alert('Failed to start conversation: ' + data.message);
+                    messageBtn.textContent = originalText;
+                    messageBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error starting conversation:', error);
+                alert('Error starting conversation. Please try again.');
+                if (event && event.target) {
+                    event.target.textContent = 'Message';
+                    event.target.disabled = false;
+                }
+            }
+        }
+
+        // Update booking status
+        function updateBookingStatus(bookingId, status) {
+            const action = status === 'confirmed' ? 'accept' : 'decline';
+
+            if (confirm(`Are you sure you want to ${action} this booking?`)) {
+                // Disable buttons to prevent double-clicking
+                const row = document.querySelector(`tr[data-booking-id="${bookingId}"]`);
+                const buttons = row.querySelectorAll('button');
+                buttons.forEach(btn => btn.disabled = true);
+
+                fetch(`/organizer/bookings/update-status/${bookingId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: status })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to update booking status');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message || 'Failed to update booking status');
+                    buttons.forEach(btn => btn.disabled = false);
+                });
+            }
+        }
+
+        // Tab filtering functionality
+        let currentFilter = 'all';
+
+        function filterBookings(status) {
+            currentFilter = status;
+            const rows = document.querySelectorAll('.booking-row');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.querySelector('table');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                const message = status === 'all' ? 'No booking requests found' : `No ${status} bookings found`;
+                document.getElementById('emptyStateMessage').textContent = message;
+            } else {
+                table.style.display = '';
+                emptyState.style.display = 'none';
+            }
+
+            // Update active tab
+            document.querySelectorAll('.tab-link').forEach(tab => {
+                if (tab.dataset.status === status) {
+                    tab.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                    tab.classList.add('text-primary', 'border-primary');
+                } else {
+                    tab.classList.remove('text-primary', 'border-primary');
+                    tab.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                }
+            });
+        }
+
+        // Search functionality
+        function searchBookings(query) {
+            const rows = document.querySelectorAll('.booking-row');
+            const emptyState = document.getElementById('emptyState');
+            const table = document.querySelector('table');
+            let visibleCount = 0;
+
+            query = query.toLowerCase().trim();
+
+            rows.forEach(row => {
+                const client = row.dataset.client.toLowerCase();
+                const service = row.dataset.service.toLowerCase();
+                const matchesSearch = !query || client.includes(query) || service.includes(query);
+                const matchesFilter = currentFilter === 'all' || row.dataset.status === currentFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Show/hide empty state
+            if (visibleCount === 0) {
+                table.style.display = 'none';
+                emptyState.style.display = 'block';
+                document.getElementById('emptyStateMessage').textContent = 'No bookings found matching your search';
+            } else {
+                table.style.display = '';
+                emptyState.style.display = 'none';
+            }
+        }
+
+        // Initialize event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab click handlers
+            document.querySelectorAll('.tab-link').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const status = this.dataset.status;
+                    filterBookings(status);
+                });
+            });
+
+            // Search input handler
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    searchBookings(e.target.value);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

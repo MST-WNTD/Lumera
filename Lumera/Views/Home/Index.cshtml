@@ -1,0 +1,229 @@
+﻿@using Lumera.Models
+@using System.Collections.Generic
+@using Lumera.Services
+@{
+    ViewData["Title"] = "LUMERA - Plan Your Event Effortlessly";
+    Layout = "_Layout";
+
+    var featuredOrganizers = ViewBag.FeaturedOrganizers as List<Organizer> ?? new List<Organizer>();
+    var featuredSuppliers = ViewBag.FeaturedSuppliers as List<Supplier> ?? new List<Supplier>();
+    var serviceCategories = ViewBag.ServiceCategories as List<ServiceCategoryViewModel> ?? new List<ServiceCategoryViewModel>();
+
+    var hasFeaturedOrganizers = featuredOrganizers.Count > 0;
+    var hasFeaturedSuppliers = featuredSuppliers.Count > 0;
+    var hasServiceCategories = serviceCategories.Count > 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/Home.css" />
+    <link rel="stylesheet" href="~/css/landpage.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="landpage-title">
+            <h1>Plan Your Event Effortlessly</h1>
+            <p>
+                Connect with trusted organizers and suppliers. Customize your event with AI-powered recommendations.
+            </p>
+            <div class="hero-buttons">
+                <!-- ✅ Fixed buttons -->
+                <a href="@Url.Action("AIPlanner", "Home")" class="btn btn-primary">Use AI Planner</a>
+                <a href="@Url.Action("FindOrganizers", "Organizer")" class="btn btn-secondary">Find Organizer</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="float-img">
+        <img src="~/img/landpage/lp2.jpg" />
+    </div>
+
+    <!-- Features Section -->
+    <div class="landpage-div2">
+        <div class="feature-container">
+            <!-- Left Box -->
+            <div class="feature-box">
+                <i class="bi bi-person-fill icon-style"></i>
+                <h3>Find Organizers</h3>
+                <p>Hire experienced event coordinators to manage your event.</p>
+            </div>
+
+            <!-- Middle Box -->
+            <div class="feature-box">
+                <i class="bi bi-shop icon-style"></i>
+                <h3>Browse Services</h3>
+                <p>Choose from photographers, caterers, lights & sounds, and more.</p>
+            </div>
+
+            <!-- Right Box -->
+            <div class="feature-box">
+                <i class="bi bi-magic icon-style"></i>
+                <h3>AI Recommendations</h3>
+                <p>Let our AI suggest the best options based on your needs.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Organizers & Suppliers -->
+    @if (hasFeaturedOrganizers || hasFeaturedSuppliers)
+    {
+        <section class="featured-section">
+            <h2 class="section-title">Featured Organizers & Suppliers</h2>
+            <div class="featured-image"></div>
+        </section>
+    }
+    <!-- ==============================
+         FEATURED ORGANIZERS
+    ============================== -->
+    <section class="featured-section">
+        <h2 class="section-title">Featured Organizers</h2>
+        <div class="supplier-grid">
+            @foreach (var organizer in featuredOrganizers)
+            {
+                <div class="supplier-item">
+                    <div class="supplier-info">
+                        <h4>@organizer.BusinessName</h4>
+                        <p>@organizer.BusinessDescription</p>
+                        <div class="rating">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                <span class="star @(i < Math.Floor((double)organizer.AverageRating) ? "filled" : "")">★</span>
+                            }
+                            <span>@organizer.AverageRating.ToString("0.0")</span>
+                        </div>
+                        <p class="supplier-description">@organizer.TotalReviews reviews</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+    <!-- Featured Suppliers -->
+    @if (hasFeaturedSuppliers)
+    {
+        <section class="supplier-samples">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Featured Suppliers</h2>
+            <div class="supplier-grid">
+                @foreach (var supplier in featuredSuppliers)
+                {
+                    <div class="supplier-item" data-supplier-id="@supplier.SupplierID">
+                        <div class="supplier-info">
+                            <h4>@supplier.BusinessName</h4>
+                            <p>@supplier.ServiceCategory</p>
+                            <div class="rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <span class="star @(i <= Math.Round(supplier.AverageRating) ? "filled" : "")">★</span>
+                                }
+                                <span>(@supplier.TotalReviews reviews)</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(supplier.BusinessDescription))
+                            {
+                                <p class="supplier-description">
+                                    @(supplier.BusinessDescription.Length > 100
+                                        ? supplier.BusinessDescription.Substring(0, 100) + "..."
+                                        : supplier.BusinessDescription)
+                                </p>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- Explore Services -->
+    <section class="explore-services">
+        <div class="explore-background"></div>
+        <div class="explore-content">
+            <h2 class="explore-title">Explore Event Services</h2>
+            <p class="explore-subtitle">Find trusted suppliers for catering, photography, hosting, and more.</p>
+        </div>
+    </section>
+
+    <!-- Service Categories -->
+    @if (hasServiceCategories)
+    {
+        <section class="service-categories">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">Popular Service Categories</h2>
+            <div class="services-container">
+                @{
+                    var categoryIcons = new Dictionary<string, string>
+            {
+            { "Catering", "chef-icon" },
+            { "Photography", "camera-icon" },
+            { "Videography", "camera-icon" },
+            { "Venue", "spotlight-icon" },
+            { "Decoration", "spotlight-icon" },
+            { "Entertainment", "spotlight-icon" },
+            { "General", "chef-icon" },
+            { "Event Planning", "chef-icon" },
+            { "Florist", "spotlight-icon" },
+            { "Transportation", "spotlight-icon" },
+            { "Audio Visual", "spotlight-icon" },
+            { "Equipment Rental", "spotlight-icon" }
+            };
+                }
+
+                @foreach (var category in serviceCategories)
+                {
+                    var iconClass = categoryIcons.ContainsKey(category.Category)
+                    ? categoryIcons[category.Category]
+                    : "chef-icon";
+
+                    <div class="service-card" data-category="@category.Category">
+                        <div class="service-icon @iconClass"></div>
+                        <h3>@category.Category</h3>
+                        <p>@category.Count available providers</p>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+
+    <!-- AI Planner Section -->
+    <section class="ai-planner-section">
+        <div class="ai-planner-background"></div>
+        <div class="ai-planner-content">
+            <h2 class="ai-title">From Vision to Venue—AI Makes It Happen</h2>
+            <p class="ai-subtitle">Tell us your budget, location, and preferences—we'll handle the rest.</p>
+
+            <div class="ai-chat-demo">
+                <div class="ai-response">
+                    <p>Awesome! 🎉 I found 2 catering services, 3 photographers, and a venue that fits your budget and location. Here are the top picks:</p>
+                    <div class="ai-suggestions">
+                        <p>Elegance Catering Services</p>
+                        <div class="suggestion-images">
+                            <div class="suggestion-img"></div>
+                            <div class="suggestion-img"></div>
+                            <div class="suggestion-img"></div>
+                            <div class="suggestion-img"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <div class="chat-box">
+                        <p>I'm planning a birthday party in Quezon City with a ₱50,000 budget.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <!-- ✅ Fixed buttons -->
+                <a href="@Url.Action("AIPlanner", "Home")" class="btn btn-primary">Try AI Planner</a>
+                <a href="@Url.Action("LoginSignup", "Account")" class="btn btn-secondary">Customize my Event</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/js/landpage.js"></script>
+    <script src="~/js/Home.js"></script>
+</body>
+</html>
